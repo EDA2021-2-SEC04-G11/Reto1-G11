@@ -48,3 +48,9 @@ los mismos.
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 # Funciones de ordenamiento
+
+def addArtist(catalogArtist, artist):
+    pass
+
+def addArtwork(catalogArtworks, artwork):
+    pass
