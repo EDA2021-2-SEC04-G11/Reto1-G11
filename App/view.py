@@ -41,6 +41,33 @@ def printMenu():
 
 catalog = None
 
+def printNumArtist(newCatalogArtist):
+    n = 0
+    for i in range(len(newCatalogArtist)):
+        n += 1
+    print('Número de Artistas:', n)
+
+def printNumObras(newCatalogArtworks):
+    n = 0
+    for i in range(len(newCatalogArtworks)):
+        n += 1
+    print('Número de Obras:', n)
+
+def printUltimosTres(newCatalogArtist, newCatalogArtworks):
+    lArts = []
+    lWorks = []
+    tamanioArts = len(newCatalogArtist)
+    tamanioWorks = len(newCatalogArtworks)
+    
+    for i in range(tamanioArts-3,tamanioArts):
+        lArts.append(newCatalogArtist{i})
+
+    for j in range(tamanioWorks-3,tamanioWorks):
+        lWorks.append(newCatalogArtworks{i})
+
+    print("ültimos 3 Artistas:", lArts,
+          "Últimas 3 Obras:", lWorks)
+
 """
 Menu principal
 """
