@@ -5,6 +5,7 @@ assert cf
 import config as cf
 import csv
 from DISClib.Algorithms.Sorting import shellsort as sa
+import controller
 
 #VIEW
 

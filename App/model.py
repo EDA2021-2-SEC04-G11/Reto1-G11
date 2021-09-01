@@ -1,4 +1,12 @@
-﻿#MODEL
+﻿#IMPORTS
+import sys
+from DISClib.ADT import list as lt
+assert cf
+import config as cf
+import csv
+from DISClib.Algorithms.Sorting import shellsort as sa
+
+#MODEL
 
 def newCatalog():
     catalog = {
