@@ -1,56 +1,42 @@
-﻿"""
- * Copyright 2020, Departamento de sistemas y Computación,
- * Universidad de Los Andes
- *
- *
- * Desarrolado para el curso ISIS1225 - Estructuras de Datos y Algoritmos
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Contribuciones:
- *
- * Dario Correal - Version inicial
- """
+﻿#MODEL
 
+def newCatalog():
+    catalog = {
+        'artworks': None,
+        'artists':None,
+    }
+    catalog['artwroks'] = lt.newList()
+    catalog['artists'] = lt.newList()
+    return catalog
 
-import config as cf
-from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sa
-assert cf
+def addArtwork_and_Artist_to_catalog(catalog,artist,artwork):
+    artistas = catalog['artists']
+    name = artist['name']
+    if lt.isPresent(artistas,name) != 0:
+        artist_info = newArtist()
+        artwork_info = newArtwork()
+        includeArtworks(artist_info,artwork_info)
+        lt.addLast(catalog['artists'],artist_info)
+        lt.addLast(catalog['artworks'],artwork_info)
 
-"""
-Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
-los mismos.
-"""
+def newArtwork(artwork):
+    artwork_out = {'title':None,'fecha':None,'medio':None,'dimensiones':None,'artistID':None}
+    artwork_out['title'] = artwork['Title']
+    artwork_out['fecha'] = artwork['DateAcquired']
+    artwork_out['medio'] = artwork['Medium']
+    artwork_out['dimensiones'] = artwork['Dimensions']
+    artwork_out['ID'] = artwork['ConstituentID']
+    return artwork_out
 
-# Construccion de modelos
+def newArtist(artist):
+    artist_out = {'name':None,'nationality':None,'gender':None,'birthday':None, 'artworks':None, 'ID':None}
+    artist_out['name'] = artist['DisplayName']
+    artist_out['nationality'] = artist['Nationality']
+    artist_out['gender'] = artist['Gender']
+    artist_out['birthday'] = artist['BeginDate']
+    artist_out['ID'] = artist['ConstituentID']
+    artist_out['artworks'] = lt.newList()
+    return artist_out
 
-
-
-# Funciones para agregar informacion al catalogo
-
-# Funciones para creacion de datos
-
-# Funciones de consulta
-
-# Funciones utilizadas para comparar elementos dentro de una lista
-
-# Funciones de ordenamiento
-
-def addArtist(catalogArtist, artist):
-    pass
-
-def addArtwork(catalogArtworks, artwork):
+def includeArtworks(artist_info,artwork_info):
     pass

@@ -1,113 +1,117 @@
-import config as cf
-import model
-import csv
+#IMPORTS
+import sys
 from DISClib.ADT import list as lt
+assert cf
+import config as cf
+import csv
+from DISClib.Algorithms.Sorting import shellsort as sa
 
+#VIEW
+
+def printMenu():
+    print("Bienvenido")
+    print("1- Cargar información en el catálogo")
+    print("2- ")
+
+def initCatalog():
+    """
+    Inicializa el catalogo de libros
+    """
+    return controller.initCatalog()
+
+def loadData(catalog):
+    """
+    Carga los libros en la estructura de datos
+    """
+    controller.loadData(catalog)
+
+catalog = None
 
 """
-El controlador se encarga de mediar entre la vista y el modelo.
+Menu principal
 """
+while True:
+    printMenu()
+    inputs = input('Seleccione una opción para continuar\n')
+    if int(inputs[0]) == 1:
+        print("Cargando información de los archivos ....")
+        catalog = initCatalog()
+        loadData(catalog)
+        print('Libros cargados: ' + str(lt.size(catalog['books'])))
+        print('Autores cargados: ' + str(lt.size(catalog['authors'])))
+        print('Géneros cargados: ' + str(lt.size(catalog['tags'])))
+        print('Asociación de Géneros a Libros cargados: ' + str(lt.size(catalog['book_tags'])))
 
-# Inicialización del Catálogo de libros
-def newCatalogArtist():
-    catalog = {'ConstituentID': None,
-               'DisplayName': None,
-               'ArtistBio': None,
-               'Nationality': None,
-               'Gender': None,
-               'BeginDate': None,
-               'EndDate': None,
-               'Wiki QID': None,
-               'ULAN': None}
-    catalog['ConstituentID'] = lt.newList()
-    catalog['DisplayName'] = lt.newList()
-    catalog['ArtistBio'] = lt.newList()
-    catalog['Nationality'] = lt.newList()
-    catalog['Gender'] = lt.newList()
-    catalog['BeginDate'] = lt.newList()
-    catalog['EndDate'] = lt.newList()
-    catalog['Wiki QID'] = lt.newList()
-    catalog['ULAN'] = lt.newList()
+    elif int(inputs[0]) == 2:
+        pass
 
-    return catalog
+    else:
+        sys.exit(0)
+sys.exit(0)
 
-def newCatalogArtworks():
-    catalog = {'ObjectID': None,
-               'Title': None,
-               'ConstituentID': None,
-               'Date': None,
-               'Medium': None,
-               'Dimensions': None,
-               'CreditLine': None,
-               'AccessionNumber': None,
-               'Classification': None,
-               'Department': None,
-               'DateAcquired': None,
-               'Cataloged': None,
-               'URL': None,
-               'Circumference (cm)': None,
-               'Depth (cm)': None,
-               'Diameter (cm)': None,
-               'Height (cm)': None,
-               'Length (cm)': None,
-               'Weight (kg)': None,
-               'Width (cm)': None,
-               'Seat Height (cm)': None,
-               'Duration (sec.)': None,
-               }
-    catalog['ObjectID'] = lt.newList()
-    catalog['Title'] = lt.newList()
-    catalog['ConstituentID'] = lt.newList()
-    catalog['Date'] = lt.newList()
-    catalog['Medium'] = lt.newList()
-    catalog['Dimensions'] = lt.newList()
-    catalog['CreditLine'] = lt.newList()
-    catalog['AccessionNumber'] = lt.newList()
-    catalog['Classification'] = lt.newList()
-    catalog['Department'] = lt.newList()
-    catalog['DateAcquired'] = lt.newList()
-    catalog['Cataloged'] = lt.newList()
-    catalog['URL'] = lt.newList()
-    catalog['Circumference (cm)'] = lt.newList()
-    catalog['Depth (cm)'] = lt.newList()
-    catalog['Diameter (cm)'] = lt.newList()
-    catalog['Height (cm)'] = lt.newList()
-    catalog['Length (cm)'] = lt.newList()
-    catalog['Weight (kg)'] = lt.newList()
-    catalog['Width (cm)'] = lt.newList()
-    catalog['Seat Height (cm)'] = lt.newList()
-    catalog['Duration (sec.)'] = lt.newList()
+#CONTROLLER
+
+def initCatalog():
+    pass
 
 
-    return catalog
-
-def loadArtists(catalogArtist):
+def loadArtist_and_Artworks(catalogArtist):
     """
     Carga los libros del archivo.  Por cada libro se toman sus autores y por
     cada uno de ellos, se crea en la lista de autores, a dicho autor y una
     referencia al libro que se esta procesando.
     """
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
-    input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
-    for artist in input_file:
-        model.addArtist(catalogArtist, artist)
+    input_file_artists = csv.DictReader(open(artistsfile, encoding='utf-8'))
+    artworksfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
+    input_file_artworks = csv.DictReader(open(artworksfile, encoding='utf-8'))
+    for artist, artwork in input_file_artists,input_file_artworks:
+        model.addArtwork_and_Artist_to_catalog(catalogArtist, artist, artwork)
         #print(artist)
 
-def loadArtworks(catalogArtworks):
-    """
-    Carga los libros del archivo.  Por cada libro se toman sus autores y por
-    cada uno de ellos, se crea en la lista de autores, a dicho autor y una
-    referencia al libro que se esta procesando.
-    """
-    artworksfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
-    input_file = csv.DictReader(open(artworksfile, encoding='utf-8'))
-    for artwork in input_file:
-        model.addArtwork(catalogArtworks, artwork)
-        #print(artwork)
+def loadData():
+    pass
 
-def test():
-    A = newCatalogArtist
-    W = newCatalogArtworks
-    loadArtists(A)
-    loadArtworks(W)
-#test()
+#MODEL
+
+def newCatalog():
+    catalog = {
+        'artworks': None,
+        'artists':None,
+    }
+    catalog['artwroks'] = lt.newList()
+    catalog['artists'] = lt.newList()
+    return catalog
+
+def addArtwork_and_Artist_to_catalog(catalog,artist,artwork):
+    artistas = catalog['artists']
+    name = artist['name']
+    if lt.isPresent(artistas,name) != 0:
+        artist_info = newArtist()
+        artwork_info = newArtwork()
+        includeArtworks(artist_info,artwork_info)
+        lt.addLast(catalog['artists'],artist_info)
+        lt.addLast(catalog['artworks'],artwork_info)
+
+def newArtwork(artwork):
+    artwork_out = {'title':None,'fecha':None,'medio':None,'dimensiones':None,'artistID':None}
+    artwork_out['title'] = artwork['Title']
+    artwork_out['fecha'] = artwork['DateAcquired']
+    artwork_out['medio'] = artwork['Medium']
+    artwork_out['dimensiones'] = artwork['Dimensions']
+    artwork_out['ID'] = artwork['ConstituentID']
+    return artwork_out
+
+def newArtist(artist):
+    artist_out = {'name':None,'nationality':None,'gender':None,'birthday':None, 'artworks':None, 'ID':None}
+    artist_out['name'] = artist['DisplayName']
+    artist_out['nationality'] = artist['Nationality']
+    artist_out['gender'] = artist['Gender']
+    artist_out['birthday'] = artist['BeginDate']
+    artist_out['ID'] = artist['ConstituentID']
+    artist_out['artworks'] = lt.newList()
+    return artist_out
+
+def includeArtworks(artist_info,artwork_info):
+    if artwork_info['ID'] == artist_info['artistID']:
+        lt.addLast(artist_info['artworks'],artwork_info['title'])

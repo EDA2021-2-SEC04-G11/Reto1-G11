@@ -1,54 +1,31 @@
-﻿"""
- * Copyright 2020, Departamento de sistemas y Computación,
- * Universidad de Los Andes
- *
- *
- * Desarrolado para el curso ISIS1225 - Estructuras de Datos y Algoritmos
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
- """
-
+﻿#IMPORTS
+import sys
+from DISClib.ADT import list as lt
+assert cf
 import config as cf
-import model
 import csv
+from DISClib.Algorithms.Sorting import shellsort as sa
+
+#CONTROLLER
+
+def initCatalog():
+    pass
 
 
-"""
-El controlador se encarga de mediar entre la vista y el modelo.
-"""
-
-def loadArtists(catalogArtist):
+def loadArtist_and_Artworks(catalogArtist):
     """
     Carga los libros del archivo.  Por cada libro se toman sus autores y por
     cada uno de ellos, se crea en la lista de autores, a dicho autor y una
     referencia al libro que se esta procesando.
     """
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
-    input_file = csv.DictReader(open(artistsfile, encoding='utf-8'))
-    for artist in input_file:
-        model.addArtist(catalogArtist, artist)
+    input_file_artists = csv.DictReader(open(artistsfile, encoding='utf-8'))
+    artworksfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
+    input_file_artworks = csv.DictReader(open(artworksfile, encoding='utf-8'))
+    for artist, artwork in input_file_artists,input_file_artworks:
+        model.addArtwork_and_Artist_to_catalog(catalogArtist, artist, artwork)
         #print(artist)
 
-def loadArtworks(catalogArtworks):
-    """
-    Carga los libros del archivo.  Por cada libro se toman sus autores y por
-    cada uno de ellos, se crea en la lista de autores, a dicho autor y una
-    referencia al libro que se esta procesando.
-    """
-    artworksfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
-    input_file = csv.DictReader(open(artworksfile, encoding='utf-8'))
-    for artwork in input_file:
-        model.addArtwork(catalogArtworks, artwork)
-        #print(artwork)
+def loadData():
+    pass
+
