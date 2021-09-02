@@ -1,32 +1,28 @@
 ﻿#IMPORTS
-import sys
-from DISClib.ADT import list as lt
-assert cf
 import config as cf
-import csv
-from DISClib.Algorithms.Sorting import shellsort as sa
 import model
-
-#CONTROLLER
+import csv
 
 def initCatalog():
-    pass
-
-
-def loadArtist_and_Artworks(catalogArtist):
     """
-    Carga los libros del archivo.  Por cada libro se toman sus autores y por
-    cada uno de ellos, se crea en la lista de autores, a dicho autor y una
-    referencia al libro que se esta procesando.
+    Llama la funcion de inicializacion del catalogo del modelo.
     """
+    catalog = model.newCatalog()
+    return catalog
+def loadData(catalog):
+    """
+    Carga los datos de los archivos y cargar los datos en la
+    estructura de datos
+    """
+    loadArtists(catalog)
+    loadArtworks(catalog)
+def loadArtists(catalog):
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
-    input_file_artists = csv.DictReader(open(artistsfile, encoding='utf-8'))
+    artistsFile = csv.DictReader(open(artistsfile, encoding='utf-8'))
+    for artist in artistsFile:
+        model.addArtist(catalog,artist)
+def loadArtworks(catalog):
     artworksfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
-    input_file_artworks = csv.DictReader(open(artworksfile, encoding='utf-8'))
-    for artist, artwork in input_file_artists,input_file_artworks:
-        model.addArtwork_and_Artist_to_catalog(catalogArtist, artist, artwork)
-        #print(artist)
-
-def loadData():
-    pass
-
+    artworksFile = csv.DictReader(open(artworksfile, encoding='utf-8'))
+    for artwork in artworksFile:
+        model.addArtwork(catalog,artwork)
