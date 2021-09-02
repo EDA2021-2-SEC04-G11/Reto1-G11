@@ -60,10 +60,10 @@ def printUltimosTres(newCatalogArtist, newCatalogArtworks):
     tamanioWorks = len(newCatalogArtworks)
     
     for i in range(tamanioArts-3,tamanioArts):
-        lArts.append(newCatalogArtist{i})
+        lArts.append(newCatalogArtist[i])
 
     for j in range(tamanioWorks-3,tamanioWorks):
-        lWorks.append(newCatalogArtworks{i})
+        lWorks.append(newCatalogArtworks[i])
 
     print("ültimos 3 Artistas:", lArts,
           "Últimas 3 Obras:", lWorks)
