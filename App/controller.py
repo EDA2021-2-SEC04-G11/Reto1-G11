@@ -11,17 +11,25 @@ def initCatalog():
     return catalog
 def loadData(catalog):
     """
-    Carga los datos de los archivos y cargar los datos en la
-    estructura de datos
+    Carga los datos de los archivos y carga los datos en la
+    estructura de datos.
     """
     loadArtists(catalog)
     loadArtworks(catalog)
+
 def loadArtists(catalog):
+    """
+    Carga el archivo de artistas y lo agrega al catalogo de artistas.
+    """
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
     artistsFile = csv.DictReader(open(artistsfile, encoding='utf-8'))
     for artist in artistsFile:
         model.addArtist(catalog,artist)
+
 def loadArtworks(catalog):
+    """
+    Carga el archivo de obras y lo agrega al catalogo de obras.
+    """
     artworksfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
     artworksFile = csv.DictReader(open(artworksfile, encoding='utf-8'))
     for artwork in artworksFile:
