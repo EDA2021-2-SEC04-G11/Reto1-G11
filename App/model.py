@@ -9,8 +9,8 @@ def newCatalog():
         'artworks': None,
         'artists':None,
     }
-    catalog['artworks'] = lt.newList()
-    catalog['artists'] = lt.newList()
+    catalog['artworks'] = lt.newList("ARRAY_LIST")
+    catalog['artists'] = lt.newList("ARRAY_LIST")
     return catalog
 # Funciones para agregar informacion al catalogo
 def addArtist(catalog, artist):

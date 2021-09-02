@@ -19,6 +19,23 @@ def loadData(catalog):
     Carga los libros en la estructura de datos
     """
     controller.loadData(catalog)
+def printLastArtists(catalog):
+    size = lt.size(catalog['artists'])
+    print(size+1)
+    parent = lt.getElement(catalog['artists'],size+1)
+    firstChild = lt.getElement(catalog['artists'],size)
+    secondChild = lt.getElement(catalog['artists'],size-1)
+    print(parent,'\n')
+    print(firstChild,'\n')
+    print(secondChild,'\n')
+def printLastArtworks(catalog):
+    size = lt.size(catalog['artworks'])
+    parent = lt.getElement(catalog['artworks'],size+1)
+    firstChild = lt.getElement(catalog['artworks'],size)
+    secondChild = lt.getElement(catalog['artworks'],size-1)
+    print(parent,'\n')
+    print(firstChild,'\n')
+    print(secondChild,'\n')
 catalog = None
 """
 Menu principal
@@ -32,7 +49,10 @@ while True:
         loadData(catalog)
         print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
         print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
-    elif int(inputs[0]) == 2:
+        print('Ultimos 3 elementos del archivo de artistas:')
+        #printLastArtists(catalog)
+        print('Ultimos 3 elementos del archivo de artworks:')
+        #printLastArtworks(catalog)
         pass
     else:
         sys.exit(0)
