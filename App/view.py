@@ -46,11 +46,11 @@ def printMenu():
     print("8- Reglas de transporte")
 
 
-def initCatalog():
+def initCatalog(d_structure):
     """
     Inicializa el catalogo de libros
     """
-    return controller.initCatalog()
+    return controller.initCatalog(d_structure)
 
 
 def loadData(catalog):
