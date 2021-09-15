@@ -36,13 +36,14 @@ operación solicitada
 
 def printMenu():
     print("Bienvenido")
-    print("1- Cargar información en el catálogo")
-    print("2- Listar cronologicamente los artistas")
-    print("3- Listar cronologicamente las adquisiciones")
-    print("4- clasificar las obras de un artista por técnica")
-    print("5- clasificar las obras por la nacionalidad de sus creadores")
-    print("6- transportar obras de un departamento")
-    print("7- Reglas de transporte")
+    print("1- Tipo de representacion")
+    print("2- Cargar información en el catálogo")
+    print("3- Listar cronologicamente los artistas")
+    print("4- Listar cronologicamente las adquisiciones")
+    print("5- clasificar las obras de un artista por técnica")
+    print("6- clasificar las obras por la nacionalidad de sus creadores")
+    print("7- transportar obras de un departamento")
+    print("8- Reglas de transporte")
 
 
 def initCatalog():
@@ -94,8 +95,18 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        print('Escribir al para ARRAY_LIST o ll para LINKED_LIST')
+        input_1 = input()
+        if input_1[:2] == 'al':
+            d_structure = "ARRAY_LIST"
+        elif input_1[:2] == 'll':
+            d_structure = "LINKED_LIST"
+        else:
+            print('Proporcione un dato correcto.')
+
+    elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
-        catalog = initCatalog()
+        catalog = initCatalog(d_structure)
         loadData(catalog)
         print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
         print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))

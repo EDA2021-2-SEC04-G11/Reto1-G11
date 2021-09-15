@@ -30,7 +30,7 @@ from DISClib.ADT import list as lt
 assert cf
 
 # Construccion de modelos
-def newCatalog():
+def newCatalog(d_structure):
     """
     Crea un diccionario de listas llamado "catalogo".
     """
@@ -38,8 +38,8 @@ def newCatalog():
         'artworks': None,
         'artists':None,
     }
-    catalog['artworks'] = lt.newList("ARRAY_LIST")
-    catalog['artists'] = lt.newList("ARRAY_LIST")
+    catalog['artworks'] = lt.newList(d_structure)
+    catalog['artists'] = lt.newList(d_structure)
     return catalog
 
 # Funciones para agregar informacion al catalogo

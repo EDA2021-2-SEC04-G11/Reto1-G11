@@ -28,11 +28,11 @@ import config as cf
 import model
 import csv
 
-def initCatalog():
+def initCatalog(d_structure):
     """
-    Llama la funcion de inicializacion del catalogo del modelo.
+    Llama la funcion de inicializacion del catalogo del modelo con parametro el tipo de lista para representar los datos.
     """
-    catalog = model.newCatalog()
+    catalog = model.newCatalog(d_structure)
     return catalog
 def loadData(catalog):
     """
