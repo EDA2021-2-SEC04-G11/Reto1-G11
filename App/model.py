@@ -28,6 +28,7 @@
 import config as cf
 from DISClib.ADT import list as lt
 assert cf
+import datetime
 
 # Construccion de modelos
 def newCatalog(d_structure):
@@ -97,3 +98,33 @@ def newArtwork():
 
     artworknew = {'title':None,'fecha':None,'medio':None,'dimensiones':None,'artistID':None}
     return artworknew
+
+# FUNCIONES DE COMPARACION
+
+def cmpArtworkByDateAcquired(artwork1, artwork2):
+    """
+    Devuelve verdadero (True) si el 'DateAcquired' de artwork1 es menores que el de artwork2
+    Args:
+        artwork1: informacion de la primera obra que incluye su valor 'DateAcquired'
+        artwork2: informacion de la segunda obra que incluye su valor 'DateAcquired'
+    """
+    ret = False
+    if artwork1['fecha'] != '' :
+        date1 = datetime.date.fromisoformat(artwork1['fecha'])
+    else:
+        date1 = datetime.date.today()
+    if artwork2['fecha'] != '':
+        date2 = datetime.date.fromisoformat(artwork2['fecha'])
+    else:
+        date2 = datetime.date.today()
+    if date1 < date2:
+        ret = True
+    return ret
+
+def test_cmp ():
+    d1 = '2029-10-06'
+    d2 = ''
+    dic1 = {'fecha':d1}
+    dic2 = {'fecha':d2}
+    print(cmpArtworkByDateAcquired(dic1,dic2))
+    #today's date for d2 and print False
