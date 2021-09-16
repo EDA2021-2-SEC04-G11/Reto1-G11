@@ -120,6 +120,20 @@ while True:
         printLastArtists(catalog)
         print('Ultimos 3 elementos del archivo de artworks:')
         printLastArtworks(catalog)
+        entrada = input("""Seleccione el algoritmo de ordenamiento
+             1 - Insertionsort
+             2 - Mergesort
+             3 - Quicksort
+             4 - Shellsort\n""")
+        if int(entrada[0]) == 1:
+            controller.insert(catalog)
+        elif int(entrada[0]) == 2:
+            pass
+        elif int(entrada[0]) == 3:
+            pass
+        elif int(entrada[0]) == 4:
+            pass
+        
 
     elif int(inputs[0]) == 3:
         size_subl = None
