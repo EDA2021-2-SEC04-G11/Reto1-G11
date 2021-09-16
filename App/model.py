@@ -153,7 +153,7 @@ def insertionsorting(catalog):
     ordenada = insertion.sort(catalog,cmpfunction)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
-    return ordenada, 'Time: ', elapsed_time_mseg 
+    return (ordenada, f'time: {elapsed_time_mseg}')
 
 def mergesorting(catalog):
     cmpfunction = cmpArtworkByDateAcquired
@@ -161,7 +161,8 @@ def mergesorting(catalog):
     ordenada = merge.sort(catalog, cmpfunction)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
-    return ordenada, 'Time: ', elapsed_time_mseg 
+    return (ordenada, f'time: {elapsed_time_mseg}')
+     
 
 def quicksorting(catalog):
     cmpfunction = cmpArtworkByDateAcquired
@@ -169,7 +170,8 @@ def quicksorting(catalog):
     ordenada = quick.sort(catalog, cmpfunction)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
-    return ordenada, 'Time: ', elapsed_time_mseg 
+    return (ordenada, f'time: {elapsed_time_mseg}')
+    
 
 def shellsorting(catalog):
     cmpfunction = cmpArtworkByDateAcquired
@@ -177,4 +179,4 @@ def shellsorting(catalog):
     ordenada = shell.sort(catalog, cmpfunction)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
-    return ordenada, 'Time: ', elapsed_time_mseg 
+    return (ordenada, f'time: {elapsed_time_mseg}')

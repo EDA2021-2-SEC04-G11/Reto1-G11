@@ -126,17 +126,25 @@ while True:
              3 - Quicksort
              4 - Shellsort\n""")
         if int(entrada[0]) == 1:
-            controller.insert(catalog['artworks'])
-            print('Se organizaron los archivos correctamente')
+            sortret = controller.insert(catalog['artworks'])
+            time = sortret[1]
+            lista_organizada = sortret[0]
+            print(f'Se organizaron los archivos correctamente en {time}ms')
         elif int(entrada[0]) == 2:
-            controller.merge(catalog['artworks'])
-            print('Se organizaron los archivos correctamente')
+            sortret = controller.merge(catalog['artworks'])
+            time = sortret[1]
+            lista_organizada = sortret[0]
+            print(f'Se organizaron los archivos correctamente en {time}ms')
         elif int(entrada[0]) == 3:
-            controller.quick(catalog['artworks'])
-            print('Se organizaron los archivos correctamente')
+            sortret = controller.quick(catalog['artworks'])
+            time = sortret[1]
+            lista_organizada = sortret[0]
+            print(f'Se organizaron los archivos correctamente en {time}ms')
         elif int(entrada[0]) == 4:
-            controller.shell(catalog['artworks'])
-            print('Se organizaron los archivos correctamente')
+            sortret = controller.shell(catalog['artworks'])
+            time = sortret[1]
+            lista_organizada = sortret[0]
+            print(f'Se organizaron los archivos correctamente en {time}ms')
         
 
     elif int(inputs[0]) == 3:
