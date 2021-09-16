@@ -33,6 +33,7 @@ from DISClib.Algorithms.Sorting import insertionsort as insertion
 from DISClib.Algorithms.Sorting import mergesort as merge
 from DISClib.Algorithms.Sorting import quicksort as quick
 from DISClib.Algorithms.Sorting import shellsort as shell
+import time
 
 # Construccion de modelos
 def newCatalog(d_structure,pos, numelem_artworks, numelem_artists, prev_catalog):
@@ -138,19 +139,42 @@ def test_cmp ():
     dic2 = {'fecha':d2}
     print(cmpArtworkByDateAcquired(dic1,dic2))
     #today's date for d2 and print False
+    """
+    start_time = time.process_time()
+    sa.sort(sub_list, compareratings)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return elapsed_time_mseg
+    """
 
 def insertionsorting(catalog):
     cmpfunction = cmpArtworkByDateAcquired
-    return insertion.sort(catalog,cmpfunction)
+    start_time = time.process_time()
+    ordenada = insertion.sort(catalog,cmpfunction)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return ordenada, 'Time: ', elapsed_time_mseg 
 
 def mergesorting(catalog):
     cmpfunction = cmpArtworkByDateAcquired
-    return merge.sort(catalog, cmpfunction)
+    start_time = time.process_time()
+    ordenada = merge.sort(catalog, cmpfunction)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return ordenada, 'Time: ', elapsed_time_mseg 
 
 def quicksorting(catalog):
     cmpfunction = cmpArtworkByDateAcquired
-    return quick.sort(catalog, cmpfunction)
+    start_time = time.process_time()
+    ordenada = quick.sort(catalog, cmpfunction)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return ordenada, 'Time: ', elapsed_time_mseg 
 
 def shellsorting(catalog):
     cmpfunction = cmpArtworkByDateAcquired
-    return shell.sort(catalog, cmpfunction)
+    start_time = time.process_time()
+    ordenada = shell.sort(catalog, cmpfunction)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return ordenada, 'Time: ', elapsed_time_mseg 
