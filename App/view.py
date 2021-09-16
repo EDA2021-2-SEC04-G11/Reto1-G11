@@ -37,14 +37,15 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Tipo de representacion")
-    print("2- Cargar 100% de la información en el catálogo")
-    print("3- Cargar sublista con tamaño personalizado") 
-    print("4- Listar cronologicamente los artistas")
-    print("5- Listar cronologicamente las adquisiciones")
-    print("6- clasificar las obras de un artista por técnica")
-    print("7- clasificar las obras por la nacionalidad de sus creadores")
-    print("8- transportar obras de un departamento")
-    print("9- Reglas de transporte")
+    print("2- Hacer sort")
+    print("3- Cargar 100% de la información en el catálogo")
+    print("4- Cargar sublista con tamaño personalizado") 
+    print("5- Listar cronologicamente los artistas")
+    print("6- Listar cronologicamente las adquisiciones")
+    print("7- clasificar las obras de un artista por técnica")
+    print("8- clasificar las obras por la nacionalidad de sus creadores")
+    print("9- transportar obras de un departamento")
+    print("10- Reglas de transporte")
 
 
 def initCatalog(d_structure,pos,numelem_artworks,numelem_artists, prev_catalog):
@@ -105,21 +106,7 @@ while True:
             d_structure = "LINKED_LIST"
         else:
             print('Proporcione un dato correcto.')
-
     elif int(inputs[0]) == 2:
-        pos = 0
-        numelem_artworks = None
-        numelem_artists = None
-        prev_catalog = None
-        print("Cargando información de los archivos ....")
-        catalog = initCatalog(d_structure,pos,numelem_artworks,numelem_artists, prev_catalog)
-        loadData(catalog)
-        print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
-        print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
-        print('Ultimos 3 elementos del archivo de artistas:')
-        printLastArtists(catalog)
-        print('Ultimos 3 elementos del archivo de artworks:')
-        printLastArtworks(catalog)
         entrada = input("""Seleccione el algoritmo de ordenamiento
              1 - Insertionsort
              2 - Mergesort
@@ -145,9 +132,24 @@ while True:
             time = sortret[1]
             lista_organizada = sortret[0]
             print(f'Se organizaron los archivos correctamente en {time}ms')
-        
 
     elif int(inputs[0]) == 3:
+        pos = 0
+        numelem_artworks = None
+        numelem_artists = None
+        prev_catalog = None
+        print("Cargando información de los archivos ....")
+        catalog = initCatalog(d_structure,pos,numelem_artworks,numelem_artists, prev_catalog)
+        loadData(catalog)
+        print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
+        print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
+        print('Ultimos 3 elementos del archivo de artistas:')
+        printLastArtists(catalog)
+        print('Ultimos 3 elementos del archivo de artworks:')
+        printLastArtworks(catalog)
+        
+
+    elif int(inputs[0]) == 4:
         size_subl = None
         condition_subl = True
         count = 0
