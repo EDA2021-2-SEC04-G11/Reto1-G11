@@ -47,11 +47,11 @@ def printMenu():
     print("9- Reglas de transporte")
 
 
-def initCatalog(d_structure):
+def initCatalog(d_structure,pos,numelem_artworks,numelem_artists, prev_catalog):
     """
     Inicializa el catalogo de libros
     """
-    return controller.initCatalog(d_structure)
+    return controller.initCatalog(d_structure,pos,numelem_artworks,numelem_artists, prev_catalog)
 
 
 def loadData(catalog):
@@ -110,8 +110,9 @@ while True:
         pos = 0
         numelem_artworks = None
         numelem_artists = None
+        prev_catalog = None
         print("Cargando información de los archivos ....")
-        catalog = initCatalog(d_structure,pos,numelem_artworks,numelem_artists)
+        catalog = initCatalog(d_structure,pos,numelem_artworks,numelem_artists, prev_catalog)
         loadData(catalog)
         print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
         print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
@@ -150,8 +151,9 @@ while True:
                 print('Ingrese un porcentaje valido.')
 
         if size_subl != None and catalog != None:
+            prev_catalog = catalog
             print(f"Cargando {size_subl}% de información de los archivos ....")
-            catalog = initCatalog(d_structure,0,lt.size(catalog['artworks'])*(size_subl/100),lt.size(catalog['artists'])*(size_subl/100))
+            catalog = initCatalog(d_structure,0,lt.size(catalog['artworks'])*(size_subl/100),lt.size(catalog['artists'])*(size_subl/100), prev_catalog)
             loadData(catalog)
             print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
             print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))

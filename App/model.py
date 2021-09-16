@@ -31,7 +31,7 @@ assert cf
 import datetime
 
 # Construccion de modelos
-def newCatalog(d_structure,pos, numelem_artworks, numelem_artists):
+def newCatalog(d_structure,pos, numelem_artworks, numelem_artists, prev_catalog):
     """
     Crea un diccionario de listas llamado "catalogo".
     """
@@ -39,12 +39,14 @@ def newCatalog(d_structure,pos, numelem_artworks, numelem_artists):
             'artworks': None,
             'artists':None,
         }
-    catalog['artworks'] = lt.newList(d_structure)
-    catalog['artists'] = lt.newList(d_structure)
-    if numelem_artists != None or numelem_artworks != None:
-        catalog['artworks'] = lt.subList(catalog['artworks'],pos,numelem_artworks)
-        catalog['artists'] = lt.subList(catalog['artists'],pos,numelem_artists)
+    
+    if numelem_artists != None or numelem_artworks != None and prev_catalog != None:
+        catalog['artworks'] = lt.subList(prev_catalog['artworks'],pos,numelem_artworks)
+        catalog['artists'] = lt.subList(prev_catalog['artists'],pos,numelem_artists)
         print('¡Sublistas creadas!')
+    else:
+        catalog['artworks'] = lt.newList(d_structure)
+        catalog['artists'] = lt.newList(d_structure)
     return catalog
 
 # Funciones para agregar informacion al catalogo
