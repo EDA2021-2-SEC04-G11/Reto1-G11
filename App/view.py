@@ -37,13 +37,14 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Tipo de representacion")
-    print("2- Cargar información en el catálogo")
-    print("3- Listar cronologicamente los artistas")
-    print("4- Listar cronologicamente las adquisiciones")
-    print("5- clasificar las obras de un artista por técnica")
-    print("6- clasificar las obras por la nacionalidad de sus creadores")
-    print("7- transportar obras de un departamento")
-    print("8- Reglas de transporte")
+    print("2- Cargar 100% de la información en el catálogo")
+    print("3- Cargar sublista con tamaño personalizado") 
+    print("4- Listar cronologicamente los artistas")
+    print("5- Listar cronologicamente las adquisiciones")
+    print("6- clasificar las obras de un artista por técnica")
+    print("7- clasificar las obras por la nacionalidad de sus creadores")
+    print("8- transportar obras de un departamento")
+    print("9- Reglas de transporte")
 
 
 def initCatalog(d_structure):
@@ -87,6 +88,7 @@ def printLastArtworks(catalog):
 
 
 catalog = None
+d_structure = "LINKED_LIST"
 
 """
 Menu principal
@@ -105,8 +107,11 @@ while True:
             print('Proporcione un dato correcto.')
 
     elif int(inputs[0]) == 2:
+        pos = 0
+        numelem_artworks = None
+        numelem_artists = None
         print("Cargando información de los archivos ....")
-        catalog = initCatalog(d_structure)
+        catalog = initCatalog(d_structure,pos,numelem_artworks,numelem_artists)
         loadData(catalog)
         print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
         print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
@@ -114,6 +119,48 @@ while True:
         printLastArtists(catalog)
         print('Ultimos 3 elementos del archivo de artworks:')
         printLastArtworks(catalog)
+
+    elif int(inputs[0]) == 3:
+        size_subl = None
+        condition_subl = True
+        count = 0
+        while condition_subl:
+            input_subl = input(('Ingrese el tamaño de la muestra a cargar en porcentaje (1 - 100):\n')).strip()
+            for i in input_subl:
+                if i != ' ' and count == 0 and int(i) in range(10):
+                    count += 1
+                    size_subl = f'{i}'
+                elif i != ' ' and count == 1 and int(i) in range(10):
+                    if size_subl[0] != '1':
+                        count += 1
+                        size_subl += f'{i}'
+                        size_subl = int(size_subl)
+                        condition_subl = False
+                        break
+                    else:
+                        count += 1
+                        size_subl += f'{i}'  
+                elif i != ' ' and count == 2 and int(i) in range(10) :
+                    count += 1
+                    size_subl += f'{i}'
+                    size_subl = int(size_subl)
+                    condition_subl = False
+                    break
+            if input_subl == None:
+                print('Ingrese un porcentaje valido.')
+
+        if size_subl != None and catalog != None:
+            print(f"Cargando {size_subl}% de información de los archivos ....")
+            catalog = initCatalog(d_structure,0,lt.size(catalog['artworks'])*(size_subl/100),lt.size(catalog['artists'])*(size_subl/100))
+            loadData(catalog)
+            print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
+            print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
+            print('Ultimos 3 elementos del archivo de artistas:')
+            printLastArtists(catalog)
+            print('Ultimos 3 elementos del archivo de artworks:')
+            printLastArtworks(catalog)
+        elif catalog == None:
+            print('Primero debes de cargar los archivos para crear una sublista')
     else:
         sys.exit(0)
 sys.exit(0)
