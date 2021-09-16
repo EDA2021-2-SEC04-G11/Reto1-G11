@@ -129,11 +129,14 @@ while True:
             controller.insert(catalog['artworks'])
             print('Se organizaron los archivos correctamente')
         elif int(entrada[0]) == 2:
-            pass
+            controller.merge(catalog['artworks'])
+            print('Se organizaron los archivos correctamente')
         elif int(entrada[0]) == 3:
-            pass
+            controller.quick(catalog['artworks'])
+            print('Se organizaron los archivos correctamente')
         elif int(entrada[0]) == 4:
-            pass
+            controller.shell(catalog['artworks'])
+            print('Se organizaron los archivos correctamente')
         
 
     elif int(inputs[0]) == 3:

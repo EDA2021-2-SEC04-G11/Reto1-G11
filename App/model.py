@@ -143,3 +143,14 @@ def insertionsorting(catalog):
     cmpfunction = cmpArtworkByDateAcquired
     return insertion.sort(catalog,cmpfunction)
 
+def mergesorting(catalog):
+    cmpfunction = cmpArtworkByDateAcquired
+    return merge.sort(catalog, cmpfunction)
+
+def quicksorting(catalog):
+    cmpfunction = cmpArtworkByDateAcquired
+    return quick.sort(catalog, cmpfunction)
+
+def shellsorting(catalog):
+    cmpfunction = cmpArtworkByDateAcquired
+    return shell.sort(catalog, cmpfunction)

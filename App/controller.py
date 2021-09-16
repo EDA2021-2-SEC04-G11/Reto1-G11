@@ -63,3 +63,12 @@ def loadArtworks(catalog):
     
 def insert(catalog):
     model.insertionsorting(catalog)
+
+def merge(catalog):
+    model.mergesorting(catalog)
+
+def quick(catalog):
+    model.quicksorting(catalog)
+
+def shell(catalog):
+    model.shellsorting(catalog)
