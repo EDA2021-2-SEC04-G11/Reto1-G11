@@ -60,3 +60,6 @@ def loadArtworks(catalog):
     artworksFile = csv.DictReader(open(artworksfile, encoding='utf-8'))
     for artwork in artworksFile:
         model.addArtwork(catalog,artwork)
+    
+def insert(catalog):
+    model.insertionsorting(catalog)

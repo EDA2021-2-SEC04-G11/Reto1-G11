@@ -29,6 +29,10 @@ import config as cf
 from DISClib.ADT import list as lt
 assert cf
 import datetime
+from DISClib.Algorithms.Sorting import insertionsort as insertion
+from DISClib.Algorithms.Sorting import mergesort as merge
+from DISClib.Algorithms.Sorting import quicksort as quick
+from DISClib.Algorithms.Sorting import shellsort as shell
 
 # Construccion de modelos
 def newCatalog(d_structure,pos, numelem_artworks, numelem_artists, prev_catalog):
@@ -134,3 +138,8 @@ def test_cmp ():
     dic2 = {'fecha':d2}
     print(cmpArtworkByDateAcquired(dic1,dic2))
     #today's date for d2 and print False
+
+def insertionsorting(catalog):
+    cmpfunction = cmpArtworkByDateAcquired
+    return insertion.sort(catalog,cmpfunction)
+

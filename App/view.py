@@ -126,7 +126,8 @@ while True:
              3 - Quicksort
              4 - Shellsort\n""")
         if int(entrada[0]) == 1:
-            controller.insert(catalog)
+            controller.insert(catalog['artworks'])
+            print('Se organizaron los archivos correctamente')
         elif int(entrada[0]) == 2:
             pass
         elif int(entrada[0]) == 3:
