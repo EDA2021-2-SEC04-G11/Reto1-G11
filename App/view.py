@@ -37,9 +37,9 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Tipo de representacion")
-    print("2- Hacer sort")
-    print("3- Cargar 100% de la información en el catálogo")
-    print("4- Cargar sublista con tamaño personalizado") 
+    print("2- Cargar 100% de la información en el catálogo")
+    print("3- Cargar sublista con tamaño personalizado") 
+    print("4- Hacer sort")
     print("5- Listar cronologicamente los artistas")
     print("6- Listar cronologicamente las adquisiciones")
     print("7- clasificar las obras de un artista por técnica")
@@ -47,20 +47,17 @@ def printMenu():
     print("9- transportar obras de un departamento")
     print("10- Reglas de transporte")
 
-
-def initCatalog(d_structure,pos,numelem_artworks,numelem_artists, prev_catalog):
+def initCatalog(d_structure):
     """
     Inicializa el catalogo de libros
     """
-    return controller.initCatalog(d_structure,pos,numelem_artworks,numelem_artists, prev_catalog)
-
+    return controller.initCatalog(d_structure)
 
 def loadData(catalog):
     """
     Carga los libros en la estructura de datos
     """
     controller.loadData(catalog)
-
 
 def printLastArtists(catalog):
     """
@@ -74,7 +71,6 @@ def printLastArtists(catalog):
     print(firstChild,'\n')
     print(secondChild,'\n')
 
-
 def printLastArtworks(catalog):
     """
     Imprime los 3 ultimos elementos de artworks en el catalogo
@@ -87,6 +83,33 @@ def printLastArtworks(catalog):
     print(firstChild,'\n')
     print(secondChild,'\n')
 
+def sorting(entrada,catalog):
+    lista_organizada = None
+    if int(entrada[0]) == 1:
+        sortret = controller.insert(catalog['artworks'])
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    elif int(entrada[0]) == 2:
+        sortret = controller.merge(catalog['artworks'])
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    elif int(entrada[0]) == 3:
+        sortret = controller.quick(catalog['artworks'])
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    elif int(entrada[0]) == 4:
+        sortret = controller.shell(catalog['artworks'])
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    return lista_organizada
+
+def sublist(input: str):
+
+    pass
 
 catalog = None
 d_structure = "LINKED_LIST"
@@ -106,40 +129,14 @@ while True:
             d_structure = "LINKED_LIST"
         else:
             print('Proporcione un dato correcto.')
-    elif int(inputs[0]) == 2:
-        entrada = input("""Seleccione el algoritmo de ordenamiento
-             1 - Insertionsort
-             2 - Mergesort
-             3 - Quicksort
-             4 - Shellsort\n""")
-        if int(entrada[0]) == 1:
-            sortret = controller.insert(catalog['artworks'])
-            time = sortret[1]
-            lista_organizada = sortret[0]
-            print(f'Se organizaron los archivos correctamente en {time}ms')
-        elif int(entrada[0]) == 2:
-            sortret = controller.merge(catalog['artworks'])
-            time = sortret[1]
-            lista_organizada = sortret[0]
-            print(f'Se organizaron los archivos correctamente en {time}ms')
-        elif int(entrada[0]) == 3:
-            sortret = controller.quick(catalog['artworks'])
-            time = sortret[1]
-            lista_organizada = sortret[0]
-            print(f'Se organizaron los archivos correctamente en {time}ms')
-        elif int(entrada[0]) == 4:
-            sortret = controller.shell(catalog['artworks'])
-            time = sortret[1]
-            lista_organizada = sortret[0]
-            print(f'Se organizaron los archivos correctamente en {time}ms')
 
-    elif int(inputs[0]) == 3:
+    elif int(inputs[0]) == 2:
         pos = 0
         numelem_artworks = None
         numelem_artists = None
         prev_catalog = None
         print("Cargando información de los archivos ....")
-        catalog = initCatalog(d_structure,pos,numelem_artworks,numelem_artists, prev_catalog)
+        catalog = initCatalog(d_structure)
         loadData(catalog)
         print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
         print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
@@ -147,50 +144,29 @@ while True:
         printLastArtists(catalog)
         print('Ultimos 3 elementos del archivo de artworks:')
         printLastArtworks(catalog)
-        
+
+    elif int(inputs[0]) == 3:
+        input3 = input("Ingrese el porcentaje('xx%' con el signo) o numero ('xxxx')")
+        if catalog != None:
+            del catalog
+            catalog = None
+        catalog = sublist(input3)
 
     elif int(inputs[0]) == 4:
-        size_subl = None
-        condition_subl = True
-        count = 0
-        while condition_subl:
-            input_subl = input(('Ingrese el tamaño de la muestra a cargar en porcentaje (1 - 100):\n')).strip()
-            for i in input_subl:
-                if i != ' ' and count == 0 and int(i) in range(10):
-                    count += 1
-                    size_subl = f'{i}'
-                elif i != ' ' and count == 1 and int(i) in range(10):
-                    if size_subl[0] != '1':
-                        count += 1
-                        size_subl += f'{i}'
-                        size_subl = int(size_subl)
-                        condition_subl = False
-                        break
-                    else:
-                        count += 1
-                        size_subl += f'{i}'  
-                elif i != ' ' and count == 2 and int(i) in range(10) :
-                    count += 1
-                    size_subl += f'{i}'
-                    size_subl = int(size_subl)
-                    condition_subl = False
-                    break
-            if input_subl == None:
-                print('Ingrese un porcentaje valido.')
-
-        if size_subl != None and catalog != None:
-            prev_catalog = catalog
-            print(f"Cargando {size_subl}% de información de los archivos ....")
-            catalog = initCatalog(d_structure,0,lt.size(catalog['artworks'])*(size_subl/100),lt.size(catalog['artists'])*(size_subl/100), prev_catalog)
-            loadData(catalog)
-            print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
-            print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
-            print('Ultimos 3 elementos del archivo de artistas:')
-            printLastArtists(catalog)
-            print('Ultimos 3 elementos del archivo de artworks:')
-            printLastArtworks(catalog)
-        elif catalog == None:
-            print('Primero debes de cargar los archivos para crear una sublista')
+        entrada = input("""Seleccione el algoritmo de ordenamiento
+             1 - Insertionsort
+             2 - Mergesort
+             3 - Quicksort
+             4 - Shellsort\n""")
+        if catalog == None:
+            print('Oops, primero carga la informacion.')
+            continue
+        else:
+            temp = catalog.copy()
+            del catalog
+            catalog = sorting(entrada,temp)
+            del temp
+        
     else:
         sys.exit(0)
 sys.exit(0)
