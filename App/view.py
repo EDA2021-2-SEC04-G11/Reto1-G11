@@ -108,8 +108,21 @@ def sorting(entrada,catalog):
     return lista_organizada
 
 def sublist(input: str):
-
-    pass
+    digits = '0123456789'
+    prev_was_number = None
+    value = ''
+    type = 'n'
+    for n in input:
+        print(value)
+        if prev_was_number == None or prev_was_number and n in digits:
+            prev_was_number = True
+            value+=n
+        if n == '%':
+            type = 'p'
+            break
+    if value != '':
+        value = int(value)
+    print(f'Se cargaran {value} datos', type)
 
 catalog = None
 d_structure = "LINKED_LIST"
@@ -146,10 +159,11 @@ while True:
         printLastArtworks(catalog)
 
     elif int(inputs[0]) == 3:
-        input3 = input("Ingrese el porcentaje('xx%' con el signo) o numero ('xxxx')")
+        input3 = input("Ingrese el porcentaje('xx%' con el signo) o numero ('xxxx')\n")
         if catalog != None:
             del catalog
             catalog = None
+            print('catalog ded')
         catalog = sublist(input3)
 
     elif int(inputs[0]) == 4:
@@ -162,10 +176,13 @@ while True:
             print('Oops, primero carga la informacion.')
             continue
         else:
+            print('Copiando y eliminando catalogo antiguo...')
             temp = catalog.copy()
             del catalog
+            print('Creando nuevo catalogo personalizado...')
             catalog = sorting(entrada,temp)
             del temp
+            print('¡Nuevo catalogo personalizado creado correctamente!')
         
     else:
         sys.exit(0)
