@@ -82,7 +82,7 @@ def addInfoArtwork(artworknew,artwork):
     Añade la información de una determinada obra.
     """
     artworknew['title'] = artwork['Title']
-    artworknew['fecha'] = artwork['DateAcquired']
+    artworknew['fecha de adquisicion'] = artwork['DateAcquired']
     artworknew['medio'] = artwork['Medium']
     artworknew['dimensiones'] = artwork['Dimensions']
     artworknew['AuthorID'] = artwork['ConstituentID']

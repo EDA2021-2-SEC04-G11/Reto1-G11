@@ -36,10 +36,10 @@ operación solicitada
 
 def printMenu():
     print("Bienvenido")
-    print("1- Tipo de representacion")
+    print("1- Tipo de representacion (LINKED_LIST por default)")
     print("2- Cargar 100% de la información en el catálogo")
     print("3- Cargar sublista con tamaño personalizado") 
-    print("4- Hacer sort")
+    print("4- Hacer sort de los Artworks")
     print("5- Listar cronologicamente los artistas")
     print("6- Listar cronologicamente las adquisiciones")
     print("7- clasificar las obras de un artista por técnica")
@@ -107,22 +107,26 @@ def sorting(entrada,catalog):
         print(f'Se organizaron los archivos correctamente en {time}ms')
     return lista_organizada
 
-def sublist(input: str):
+def sublist_input(input: str):
     digits = '0123456789'
     prev_was_number = None
     value = ''
-    type = 'n'
     for n in input:
-        print(value)
+        if len(value) == 3:
+            break
         if prev_was_number == None or prev_was_number and n in digits:
             prev_was_number = True
             value+=n
-        if n == '%':
-            type = 'p'
-            break
     if value != '':
         value = int(value)
-    print(f'Se cargaran {value} datos', type)
+        if value > 100 or value == 0:
+            print('Ingresar un porcentaje valido.')
+        else:
+            print(f'Se cargaran {value}% de los datos')
+    return value
+
+def sublist_creator(value):
+    pass
 
 catalog = None
 d_structure = "LINKED_LIST"
@@ -144,10 +148,6 @@ while True:
             print('Proporcione un dato correcto.')
 
     elif int(inputs[0]) == 2:
-        pos = 0
-        numelem_artworks = None
-        numelem_artists = None
-        prev_catalog = None
         print("Cargando información de los archivos ....")
         catalog = initCatalog(d_structure)
         loadData(catalog)
@@ -159,12 +159,15 @@ while True:
         printLastArtworks(catalog)
 
     elif int(inputs[0]) == 3:
-        input3 = input("Ingrese el porcentaje('xx%' con el signo) o numero ('xxxx')\n")
+        input3 = input("Ingrese el porcentaje('xx%')\n")
         if catalog != None:
+            print('Eliminando catalogo antiguo...')
             del catalog
             catalog = None
-            print('catalog ded')
-        catalog = sublist(input3)
+        else:
+            print('No se encontro catalogo antiguo, asi que se creara el primer catalogo...')
+        value = sublist_input(input3)
+        catalog = sublist_creator(value)
 
     elif int(inputs[0]) == 4:
         entrada = input("""Seleccione el algoritmo de ordenamiento
@@ -176,13 +179,19 @@ while True:
             print('Oops, primero carga la informacion.')
             continue
         else:
-            print('Copiando y eliminando catalogo antiguo...')
+            print('Copiando catalogo antiguo...')
             temp = catalog.copy()
-            del catalog
             print('Creando nuevo catalogo personalizado...')
-            catalog = sorting(entrada,temp)
+            del catalog['artworks'] 
+            catalog['artworks'] = sorting(entrada,temp)
             del temp
             print('¡Nuevo catalogo personalizado creado correctamente!')
+            print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
+            print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
+            print('Ultimos 3 elementos del archivo de artistas:')
+            printLastArtists(catalog)
+            print('Ultimos 3 elementos del archivo de artworks:')
+            printLastArtworks(catalog)
         
     else:
         sys.exit(0)
