@@ -83,6 +83,17 @@ def printLastArtworks(catalog):
     print(firstChild,'\n')
     print(secondChild,'\n')
 
+def printFirstArtworks(catalog):
+    """
+    Imprime los 3 primeros elementos de artworks en el catalogo
+    """
+    parent = lt.getElement(catalog['artworks'],1)
+    firstChild = lt.getElement(catalog['artworks'],2)
+    secondChild = lt.getElement(catalog['artworks'],3)
+    print(parent,'\n')
+    print(firstChild,'\n')
+    print(secondChild,'\n')
+
 def sorting(entrada,catalog):
     lista_organizada = None
     if int(entrada[0]) == 1:
@@ -107,11 +118,29 @@ def sorting(entrada,catalog):
         print(f'Se organizaron los archivos correctamente en {time}ms')
     return lista_organizada
 
-def sublist_input(input: str):
+def sortingPrints(catalog):
+    entrada = input("""Seleccione el algoritmo de ordenamiento
+             1 - Insertionsort
+             2 - Mergesort
+             3 - Quicksort
+             4 - Shellsort\n""")
+    print('Copiando temporalmente el catalogo antiguo...')
+    temp = catalog.copy()
+    print('Proceso de sorting iniciado...')
+    del catalog['artworks'] 
+    catalog['artworks'] = sorting(entrada,temp)
+    del temp
+    print('¡Artworks organizados!')
+    print_catalog_elements(catalog)
+
+def sublist_input(input: str)->tuple:
     digits = '0123456789'
     prev_was_number = None
     value = ''
     for n in input:
+        if n == '.' or n == ',':
+            print('Ingresar numeros del 1 al 100')
+            return None
         if len(value) == 3:
             break
         if prev_was_number == None or prev_was_number and n in digits:
@@ -121,15 +150,71 @@ def sublist_input(input: str):
         value = int(value)
         if value > 100 or value == 0:
             print('Ingresar un porcentaje valido.')
-        else:
-            print(f'Se cargaran {value}% de los datos')
-    return value
+            return None
+        print(f'Se cargaran {value}% de los datos')
+    return value/100 #False for complete_catalog
 
-def sublist_creator(value):
-    pass
+def create_catalog_complete(d_structure):
+    print("Cargando información de los archivos ....")
+    catalog = initCatalog(d_structure)
+    loadData(catalog)
+    print_catalog_elements(catalog)
+    return catalog
 
+def print_catalog_elements(catalog):
+    print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
+    print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
+    print('Ultimos 3 elementos del archivo de artistas:')
+    printLastArtists(catalog)
+    print('Ultimos 3 elementos del archivo de artworks:')
+    printLastArtworks(catalog)
+    print('Primeros 3 elementos del archivo de artworks:')
+    printFirstArtworks(catalog)
+
+def sublist_creator(value: float, catalog, complete_catalog: bool,sorted: bool,d_structure):
+    # SORT BEFORE DOING THIS
+    max_artists = 0
+    max_artworks = 0
+    amount_artists = None
+    amount_artworks = None
+    evaluated = False
+    pos = 1
+    if catalog != None and complete_catalog and not sorted:
+        sortingPrints(catalog)
+        sorted = True
+        evaluated = True
+    elif catalog == None:
+        catalog = create_catalog_complete(d_structure)
+        complete_catalog = True
+        sortingPrints(catalog)
+        sorted = True
+        evaluated = True
+    elif catalog != None and not complete_catalog:
+        del catalog
+        catalog = create_catalog_complete(d_structure)
+        complete_catalog = True
+        sortingPrints(catalog)
+        sorted = True
+        evaluated = True
+    if evaluated:
+        max_artists = lt.size(catalog['artists'])
+        max_artworks = lt.size(catalog['artworks'])
+        amount_artists = int(max_artists*value)
+        amount_artworks = int(max_artworks*value)
+        print(amount_artists,amount_artworks)
+        temp = catalog.copy()
+        del catalog['artists']
+        del catalog['artworks']
+        catalog['artists'] = lt.subList(temp['artists'],pos,amount_artists)
+        catalog['artworks'] = lt.subList(temp['artworks'],pos,amount_artworks)
+        del temp
+    return catalog
+    
+sorted = False
+sublist_input_runs = 0
 catalog = None
 d_structure = "LINKED_LIST"
+complete_catalog = False
 
 """
 Menu principal
@@ -148,50 +233,33 @@ while True:
             print('Proporcione un dato correcto.')
 
     elif int(inputs[0]) == 2:
-        print("Cargando información de los archivos ....")
-        catalog = initCatalog(d_structure)
-        loadData(catalog)
-        print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
-        print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
-        print('Ultimos 3 elementos del archivo de artistas:')
-        printLastArtists(catalog)
-        print('Ultimos 3 elementos del archivo de artworks:')
-        printLastArtworks(catalog)
+        catalog = create_catalog_complete(d_structure)
+        complete_catalog = True
+        sorted = False
 
     elif int(inputs[0]) == 3:
-        input3 = input("Ingrese el porcentaje('xx%')\n")
-        if catalog != None:
-            print('Eliminando catalogo antiguo...')
-            del catalog
-            catalog = None
-        else:
+        value = None
+        while value == None:
+            input3 = input("Ingrese el porcentaje('xx%')\n")
+            value = sublist_input(input3)
+        if catalog == None:
             print('No se encontro catalogo antiguo, asi que se creara el primer catalogo...')
-        value = sublist_input(input3)
-        catalog = sublist_creator(value)
+        print('Creando sublista...')
+        catalog = sublist_creator(value,catalog,complete_catalog,sorted,d_structure)
+        complete_catalog = False
+        sorted = True
+        print('\n\n\n\nSUBLISTAS CREADAS CORRECTAMENTE ->\n\n\n\n')
+        print_catalog_elements(catalog)
 
     elif int(inputs[0]) == 4:
-        entrada = input("""Seleccione el algoritmo de ordenamiento
-             1 - Insertionsort
-             2 - Mergesort
-             3 - Quicksort
-             4 - Shellsort\n""")
         if catalog == None:
             print('Oops, primero carga la informacion.')
             continue
+        elif sorted:
+            print('Ya ordenaste este catalogo.')
         else:
-            print('Copiando catalogo antiguo...')
-            temp = catalog.copy()
-            print('Creando nuevo catalogo personalizado...')
-            del catalog['artworks'] 
-            catalog['artworks'] = sorting(entrada,temp)
-            del temp
-            print('¡Nuevo catalogo personalizado creado correctamente!')
-            print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
-            print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
-            print('Ultimos 3 elementos del archivo de artistas:')
-            printLastArtists(catalog)
-            print('Ultimos 3 elementos del archivo de artworks:')
-            printLastArtworks(catalog)
+            sortingPrints(catalog)
+            sorted = True
         
     else:
         sys.exit(0)

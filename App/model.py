@@ -102,7 +102,7 @@ def newArtwork():
     Retorna la obra.
     """
 
-    artworknew = {'title':None,'fecha':None,'medio':None,'dimensiones':None,'artistID':None}
+    artworknew = {'title':None,'fecha de adquisicion':None,'medio':None,'dimensiones':None,'artistID':None}
     return artworknew
 
 # FUNCIONES DE COMPARACION
@@ -115,12 +115,12 @@ def cmpArtworkByDateAcquired(artwork1, artwork2):
         artwork2: informacion de la segunda obra que incluye su valor 'DateAcquired'
     """
     ret = False
-    if artwork1['fecha'] != '' :
-        date1 = datetime.date.fromisoformat(artwork1['fecha'])
+    if artwork1['fecha de adquisicion'] != '' :
+        date1 = datetime.date.fromisoformat(artwork1['fecha de adquisicion'])
     else:
         date1 = datetime.date.today()
-    if artwork2['fecha'] != '':
-        date2 = datetime.date.fromisoformat(artwork2['fecha'])
+    if artwork2['fecha de adquisicion'] != '':
+        date2 = datetime.date.fromisoformat(artwork2['fecha de adquisicion'])
     else:
         date2 = datetime.date.today()
     if date1 < date2:
@@ -130,8 +130,8 @@ def cmpArtworkByDateAcquired(artwork1, artwork2):
 def test_cmp ():
     d1 = '2029-10-06'
     d2 = ''
-    dic1 = {'fecha':d1}
-    dic2 = {'fecha':d2}
+    dic1 = {'fecha de adquisicion':d1}
+    dic2 = {'fecha de adquisicion':d2}
     print(cmpArtworkByDateAcquired(dic1,dic2))
     #today's date for d2 and print False
     """
