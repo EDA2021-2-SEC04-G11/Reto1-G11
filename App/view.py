@@ -210,6 +210,10 @@ def sublist_creator(value: float, catalog, complete_catalog: bool,sorted: bool,d
         del temp
     return catalog
     
+def listar_cronologicamente_artists(catalog,yeari: int,yearfint): #REQUERIMIENTO 1
+
+    pass
+
 sorted = False
 sublist_input_runs = 0
 catalog = None
@@ -260,7 +264,8 @@ while True:
         else:
             sortingPrints(catalog)
             sorted = True
-        
+    elif int(inputs[0]) == 4: #LISTAR CRONOLOGICAMENTE LOS ARTISTAS
+        pass
     else:
         sys.exit(0)
 sys.exit(0)
