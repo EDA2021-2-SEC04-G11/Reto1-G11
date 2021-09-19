@@ -63,6 +63,12 @@ def createSublist(catalog,pos,value):
     del temp
     return catalog
 
+def newArtistsList(d_structure: str,key: str):
+    cmpfunction = cmpArtistsByYear
+    key = 'birthday'
+    artists_by_year = lt.newList(d_structure,cmpfunction, key)
+    return artists_by_year
+
 # Funciones para agregar informacion al catalogo
 def addArtist(catalog, artist):
     """
@@ -80,6 +86,12 @@ def addArtwork(catalog, artwork):
     addInfoArtwork(artworknew,artwork)
     lt.addLast(catalog['artworks'],artworknew)
 
+def addArtistBornInRange(yartist: dict,yrange:range, artists_by_year):
+    artistdummy = newArtist()
+    addInfoArtist(artistdummy,yartist)
+    if int(artistdummy['birthday']) in yrange:
+        lt.addLast(artists_by_year,artistdummy)
+
 # Funciones para agregar informacion a los diccionarios de artistas y artworks
 def addInfoArtist(artistnew,artist):
     """
@@ -90,6 +102,7 @@ def addInfoArtist(artistnew,artist):
     artistnew['gender'] = artist['Gender']
     artistnew['birthday'] = artist['BeginDate']
     artistnew['ID'] = artist['ConstituentID']
+    artistnew['deathday'] = artist['EndDate']
     
 def addInfoArtwork(artworknew,artwork):
     """
@@ -107,7 +120,7 @@ def newArtist():
     Crea un nuevo artista.
     Retorna el artista.
     """
-    artistnew = {'name':None,'nationality':None,'gender':None,'birthday':None,'ID':None}
+    artistnew = {'name':None,'nationality':None,'gender':None,'birthday':None,'ID':None,'deathday':None,}
     return artistnew
 
 def newArtwork():
@@ -155,6 +168,12 @@ def test_cmp ():
     elapsed_time_mseg = (stop_time - start_time)*1000
     return elapsed_time_mseg
     """
+
+def cmpArtistsByYear(year1: int, year2: int):
+    ret = False
+    if year1 < year2:
+        ret = True
+    return ret
 
 # SORTING
 

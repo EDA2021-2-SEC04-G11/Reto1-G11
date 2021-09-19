@@ -120,19 +120,33 @@ def sorting(entrada,catalog):
     return lista_organizada
 
 def sortingPrints(catalog):
+        entrada = input("""Seleccione el algoritmo de ordenamiento
+             1 - Insertionsort
+             2 - Mergesort
+             3 - Quicksort
+             4 - Shellsort\n""")
+        print('Copiando temporalmente el catalogo antiguo...')
+        temp = catalog.copy()
+        print('Proceso de sorting iniciado...')
+        del catalog['artworks'] 
+        catalog['artworks'] = sorting(entrada,temp)
+        del temp
+        print('¡Artworks organizados!')
+        print_catalog_elements(catalog)
+
+def sortingPrintsArtists(ltlist):
     entrada = input("""Seleccione el algoritmo de ordenamiento
              1 - Insertionsort
              2 - Mergesort
              3 - Quicksort
              4 - Shellsort\n""")
     print('Copiando temporalmente el catalogo antiguo...')
-    temp = catalog.copy()
+    temp = {'ltlist':ltlist}
     print('Proceso de sorting iniciado...')
-    del catalog['artworks'] 
-    catalog['artworks'] = sorting(entrada,temp)
+    ltlist = None 
+    ltlist = sorting(entrada,temp['ltlist'])
     del temp
     print('¡Artworks organizados!')
-    print_catalog_elements(catalog)
 
 def sublist_input(input: str)->tuple:
     digits = '0123456789'
@@ -177,20 +191,20 @@ def sublist_creator(value: float, catalog, complete_catalog: bool,sorted: bool,d
     evaluated = False
     pos = 1
     if catalog != None and complete_catalog and not sorted:
-        sortingPrints(catalog)
+        sortingPrints(catalog = catalog)
         sorted = True
         evaluated = True
     elif catalog == None:
         catalog = create_catalog_complete(d_structure)
         complete_catalog = True
-        sortingPrints(catalog)
+        sortingPrints(catalog = catalog)
         sorted = True
         evaluated = True
     elif catalog != None and not complete_catalog:
         del catalog
         catalog = create_catalog_complete(d_structure)
         complete_catalog = True
-        sortingPrints(catalog)
+        sortingPrints(catalog = catalog)
         sorted = True
         evaluated = True
     if evaluated:
@@ -234,7 +248,16 @@ def listar_cronologicamente_artistsPrint()->Tuple:
     print(f'Se usaran los años {yi} como inicial y {yf} como final.\n')
     return yi,yf
 
-def listar_cronologicamente_artists(catalog,yeari: int,yearf: int): #REQUERIMIENTO 1
+def listar_cronologicamente_artists(yi: int,yf: int,d_structure): #REQUERIMIENTO 1
+    key = 'deathday'
+    # 1. Filtrar el catalogo con range(yi,yf+1) usando cmp functions
+    artists_by_year = controller.listar_cronologicamente_artists(d_structure,key,yi,yf)
+    # 2. Hacer sort
+    artists_by_yearSorted = sortingPrintsArtists(artists_by_year)
+    print(artists_by_yearSorted)
+    return artists_by_yearSorted
+
+def print_requisito1(artists_sorted):
     pass
 
 sorted = False
@@ -285,10 +308,12 @@ while True:
         elif sorted:
             print('Ya ordenaste este catalogo.')
         else:
-            sortingPrints(catalog)
+            sortingPrints(catalog = catalog)
             sorted = True
     elif int(inputs[0]) == 5: #LISTAR CRONOLOGICAMENTE LOS ARTISTAS
         yi, yf = listar_cronologicamente_artistsPrint()
+        print('\n\n\n\nNO SE CREARA UN NUEVO CATALOGO TEMPORAL ->\n\n\n\n')
+        artists_by_year = listar_cronologicamente_artists(yi,yf,d_structure)
     else:
         sys.exit(0)
 sys.exit(0)
