@@ -21,6 +21,7 @@
  """
 
 
+from typing import Tuple
 import config as cf
 import sys
 import controller
@@ -173,10 +174,6 @@ def print_catalog_elements(catalog):
 
 def sublist_creator(value: float, catalog, complete_catalog: bool,sorted: bool,d_structure):
     # SORT BEFORE DOING THIS
-    max_artists = 0
-    max_artworks = 0
-    amount_artists = None
-    amount_artworks = None
     evaluated = False
     pos = 1
     if catalog != None and complete_catalog and not sorted:
@@ -197,23 +194,10 @@ def sublist_creator(value: float, catalog, complete_catalog: bool,sorted: bool,d
         sorted = True
         evaluated = True
     if evaluated:
-        max_artists = lt.size(catalog['artists'])
-        max_artworks = lt.size(catalog['artworks'])
-        amount_artists = int(max_artists*value)
-        amount_artworks = int(max_artworks*value)
-        print(amount_artists,amount_artworks)
-        temp = catalog.copy()
-        del catalog['artists']
-        del catalog['artworks']
-        catalog['artists'] = lt.subList(temp['artists'],pos,amount_artists)
-        catalog['artworks'] = lt.subList(temp['artworks'],pos,amount_artworks)
-        del temp
+        catalog = controller.createSublist(catalog,pos,value)
     return catalog
     
-def listar_cronologicamente_artists(catalog,yeari: int,yearf: int): #REQUERIMIENTO 1
-    pass
-
-def listar_cronologicamente_artistsPrint():
+def listar_cronologicamente_artistsPrint()->Tuple:
     yi = None
     yf = None
     IN = input("Ingrese el año inicial y el año final:\nex. '2014 2021'\n")
@@ -247,8 +231,11 @@ def listar_cronologicamente_artistsPrint():
                 print('Por favor ingresar el año menor como inicial y el mayor como final.')
             else:
                 break
-    print(f'Se usaran los años {yi} como inicial y {yf} como final.')
+    print(f'Se usaran los años {yi} como inicial y {yf} como final.\n')
     return yi,yf
+
+def listar_cronologicamente_artists(catalog,yeari: int,yearf: int): #REQUERIMIENTO 1
+    pass
 
 sorted = False
 sublist_input_runs = 0
@@ -283,8 +270,8 @@ while True:
             input3 = input("Ingrese el porcentaje('xx%')\n")
             value = sublist_input(input3)
         if catalog == None:
-            print('No se encontro catalogo antiguo, asi que se creara el primer catalogo...')
-        print('Creando sublista...')
+            print('\n\n\n\nNO SE ENCONTRO CATALOGO ANTIGUO, ASI QUE SE CREARA EL PRIMER CATALOGO ->\n\n\n\n')
+        print('\n\n\n\nCREANDO SUBLISTAS ->\n\n\n\n')
         catalog = sublist_creator(value,catalog,complete_catalog,sorted,d_structure)
         complete_catalog = False
         sorted = True

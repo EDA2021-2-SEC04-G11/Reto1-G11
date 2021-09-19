@@ -34,6 +34,9 @@ def initCatalog(d_structure):
     """
     catalog = model.newCatalog(d_structure)
     return catalog
+
+def createSublist(catalog,pos,value):
+    return model.createSublist(catalog,pos,value)
     
 def loadData(catalog):
     """

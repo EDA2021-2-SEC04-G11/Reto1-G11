@@ -49,6 +49,20 @@ def newCatalog(d_structure):
     catalog['artists'] = lt.newList(d_structure)
     return catalog
 
+def createSublist(catalog,pos,value):
+    max_artists = lt.size(catalog['artists'])
+    max_artworks = lt.size(catalog['artworks'])
+    amount_artists = int(max_artists*value)
+    amount_artworks = int(max_artworks*value)
+    print(amount_artists,amount_artworks)
+    temp = catalog.copy()
+    del catalog['artists']
+    del catalog['artworks']
+    catalog['artists'] = lt.subList(temp['artists'],pos,amount_artists)
+    catalog['artworks'] = lt.subList(temp['artworks'],pos,amount_artworks)
+    del temp
+    return catalog
+
 # Funciones para agregar informacion al catalogo
 def addArtist(catalog, artist):
     """
@@ -142,6 +156,8 @@ def test_cmp ():
     return elapsed_time_mseg
     """
 
+# SORTING
+
 def insertionsorting(catalog):
     cmpfunction = cmpArtworkByDateAcquired
     start_time = time.process_time()
@@ -158,7 +174,6 @@ def mergesorting(catalog):
     elapsed_time_mseg = (stop_time - start_time)*1000
     return (ordenada, f'time: {elapsed_time_mseg}')
      
-
 def quicksorting(catalog):
     cmpfunction = cmpArtworkByDateAcquired
     start_time = time.process_time()
@@ -167,7 +182,6 @@ def quicksorting(catalog):
     elapsed_time_mseg = (stop_time - start_time)*1000
     return (ordenada, f'time: {elapsed_time_mseg}')
     
-
 def shellsorting(catalog):
     cmpfunction = cmpArtworkByDateAcquired
     start_time = time.process_time()
