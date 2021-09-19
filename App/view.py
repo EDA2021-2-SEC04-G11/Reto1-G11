@@ -211,8 +211,22 @@ def sublist_creator(value: float, catalog, complete_catalog: bool,sorted: bool,d
     return catalog
     
 def listar_cronologicamente_artists(catalog,yeari: int,yearf: int): #REQUERIMIENTO 1
-
     pass
+
+def listar_cronologicamente_artistsPrint():
+    yi = None
+    yf = None
+    IN = input("Ingrese el año inicial y el año final:\nex. '2014 2021'")
+    max = 4
+    digits = '0123456789'
+    prev_was_number = None
+    for i in IN:
+        if i in digits:
+            if prev_was_number:
+                pass
+            elif prev_was_number is False:
+                pass
+    return yi,yf
 
 sorted = False
 sublist_input_runs = 0
@@ -265,7 +279,7 @@ while True:
             sortingPrints(catalog)
             sorted = True
     elif int(inputs[0]) == 5: #LISTAR CRONOLOGICAMENTE LOS ARTISTAS
-        pass
+        yi, yf = listar_cronologicamente_artistsPrint()
     else:
         sys.exit(0)
 sys.exit(0)
