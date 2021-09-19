@@ -216,16 +216,38 @@ def listar_cronologicamente_artists(catalog,yeari: int,yearf: int): #REQUERIMIEN
 def listar_cronologicamente_artistsPrint():
     yi = None
     yf = None
-    IN = input("Ingrese el año inicial y el año final:\nex. '2014 2021'")
-    max = 4
+    IN = input("Ingrese el año inicial y el año final:\nex. '2014 2021'\n")
     digits = '0123456789'
     prev_was_number = None
-    for i in IN:
-        if i in digits:
-            if prev_was_number:
-                pass
-            elif prev_was_number is False:
-                pass
+    value = ''
+    value_count = 0
+    while True:
+        for i in IN:
+            if i in digits:
+                if prev_was_number == None or prev_was_number and i in digits and len(value) < 4:
+                    value+=i
+                    prev_was_number = True
+                elif i not in digits:
+                    prev_was_number = False
+                    value = ''
+                if len(value) == 4:
+                    if value_count == 0:
+                        yi = value
+                        value = ''
+                        value_count+=1
+                    elif value_count == 1:
+                        yf = value
+                        value = ''
+                        value_count+=1  
+        #check values
+        if value_count == 2:
+            if len(str(yi)) < 4 or len(str(yf)) < 4:
+                print('Introduce años validos pls :D')
+            elif yf < yi:
+                print('Por favor ingresar el año menor como inicial y el mayor como final.')
+            else:
+                break
+    print(f'Se usaran los años {yi} como inicial y {yf} como final.')
     return yi,yf
 
 sorted = False
