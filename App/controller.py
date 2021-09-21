@@ -38,7 +38,7 @@ def initCatalog(d_structure):
 def createSublist(catalog,pos,value):
     return model.createSublist(catalog,pos,value)
 
-def listar_cronologicamente_artists(d_structure,key,yi,yf):
+def createLtListR1(d_structure,key,yi,yf):
     artists_by_year = model.newArtistsList(d_structure,key)
     loadArtistsByYear(artists_by_year,yi,yf)
     return artists_by_year
@@ -65,7 +65,7 @@ def loadArtistsByYear(artists_by_year,yi,yf):
     artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
     artistsFile = csv.DictReader(open(artistsfile, encoding='utf-8'))
     for artist in artistsFile:
-        model.addArtist(artists_by_year,yrange,artist)
+        model.addArtistBornInRange(artist,yrange,artists_by_year)
 
 def loadArtworks(catalog):
     """

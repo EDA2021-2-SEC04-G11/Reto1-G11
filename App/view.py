@@ -48,6 +48,12 @@ def printMenu():
     print("9- transportar obras de un departamento")
     print("10- Reglas de transporte")
 
+######                         ######
+######                         ######
+######      PREVIOUS LABS      ######
+######                         ######
+######                         ######
+
 def initCatalog(d_structure):
     """
     Inicializa el catalogo de libros
@@ -95,58 +101,28 @@ def printFirstArtworks(catalog):
     print(firstChild,'\n')
     print(secondChild,'\n')
 
-def sorting(entrada,catalog):
-    lista_organizada = None
-    if int(entrada[0]) == 1:
-        sortret = controller.insert(catalog['artworks'])
-        time = sortret[1]
-        lista_organizada = sortret[0]
-        print(f'Se organizaron los archivos correctamente en {time}ms')
-    elif int(entrada[0]) == 2:
-        sortret = controller.merge(catalog['artworks'])
-        time = sortret[1]
-        lista_organizada = sortret[0]
-        print(f'Se organizaron los archivos correctamente en {time}ms')
-    elif int(entrada[0]) == 3:
-        sortret = controller.quick(catalog['artworks'])
-        time = sortret[1]
-        lista_organizada = sortret[0]
-        print(f'Se organizaron los archivos correctamente en {time}ms')
-    elif int(entrada[0]) == 4:
-        sortret = controller.shell(catalog['artworks'])
-        time = sortret[1]
-        lista_organizada = sortret[0]
-        print(f'Se organizaron los archivos correctamente en {time}ms')
-    return lista_organizada
+def create_catalog_complete(d_structure):
+    print("Cargando información de los archivos ....")
+    catalog = initCatalog(d_structure)
+    loadData(catalog)
+    print_catalog_elements(catalog)
+    return catalog
 
-def sortingPrints(catalog):
-        entrada = input("""Seleccione el algoritmo de ordenamiento
-             1 - Insertionsort
-             2 - Mergesort
-             3 - Quicksort
-             4 - Shellsort\n""")
-        print('Copiando temporalmente el catalogo antiguo...')
-        temp = catalog.copy()
-        print('Proceso de sorting iniciado...')
-        del catalog['artworks'] 
-        catalog['artworks'] = sorting(entrada,temp)
-        del temp
-        print('¡Artworks organizados!')
-        print_catalog_elements(catalog)
+def print_catalog_elements(catalog):
+    print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
+    print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
+    print('Ultimos 3 elementos del archivo de artistas:')
+    printLastArtists(catalog)
+    print('Ultimos 3 elementos del archivo de artworks:')
+    printLastArtworks(catalog)
+    print('Primeros 3 elementos del archivo de artworks:')
+    printFirstArtworks(catalog)
 
-def sortingPrintsArtists(ltlist):
-    entrada = input("""Seleccione el algoritmo de ordenamiento
-             1 - Insertionsort
-             2 - Mergesort
-             3 - Quicksort
-             4 - Shellsort\n""")
-    print('Copiando temporalmente el catalogo antiguo...')
-    temp = {'ltlist':ltlist}
-    print('Proceso de sorting iniciado...')
-    ltlist = None 
-    ltlist = sorting(entrada,temp['ltlist'])
-    del temp
-    print('¡Artworks organizados!')
+######                 ######
+######                 ######
+######      LAB 4      ######
+######                 ######
+######                 ######
 
 def sublist_input(input: str)->tuple:
     digits = '0123456789'
@@ -168,23 +144,6 @@ def sublist_input(input: str)->tuple:
             return None
         print(f'Se cargaran {value}% de los datos')
     return value/100 #False for complete_catalog
-
-def create_catalog_complete(d_structure):
-    print("Cargando información de los archivos ....")
-    catalog = initCatalog(d_structure)
-    loadData(catalog)
-    print_catalog_elements(catalog)
-    return catalog
-
-def print_catalog_elements(catalog):
-    print('Artistas cargados: ' + str(lt.size(catalog['artists'])))
-    print('Artworks cargados: ' + str(lt.size(catalog['artworks'])))
-    print('Ultimos 3 elementos del archivo de artistas:')
-    printLastArtists(catalog)
-    print('Ultimos 3 elementos del archivo de artworks:')
-    printLastArtworks(catalog)
-    print('Primeros 3 elementos del archivo de artworks:')
-    printFirstArtworks(catalog)
 
 def sublist_creator(value: float, catalog, complete_catalog: bool,sorted: bool,d_structure):
     # SORT BEFORE DOING THIS
@@ -210,55 +169,140 @@ def sublist_creator(value: float, catalog, complete_catalog: bool,sorted: bool,d
     if evaluated:
         catalog = controller.createSublist(catalog,pos,value)
     return catalog
-    
-def listar_cronologicamente_artistsPrint()->Tuple:
+
+def sorting(entrada,catalog):
+    lista_organizada = None
+    if int(entrada[0]) == 1:
+        sortret = controller.insert(catalog['artworks'])
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    elif int(entrada[0]) == 2:
+        sortret = controller.merge(catalog['artworks'])
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    elif int(entrada[0]) == 3:
+        sortret = controller.quick(catalog['artworks'])
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    elif int(entrada[0]) == 4:
+        sortret = controller.shell(catalog['artworks'])
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    return lista_organizada
+
+def sortingPrints(catalog):
+    entrada = input("""Seleccione el algoritmo de ordenamiento
+             1 - Insertionsort
+             2 - Mergesort
+             3 - Quicksort
+             4 - Shellsort\n""")
+    print('Copiando temporalmente el catalogo antiguo...')
+    temp = catalog.copy()
+    print('Proceso de sorting iniciado...')
+    del catalog['artworks'] 
+    catalog['artworks'] = sorting(entrada,temp)
+    del temp
+    print('¡Artworks organizados!')
+    print_catalog_elements(catalog)
+
+######                 ######
+######                 ######
+######   REQUISITO 1   ######
+######                 ######
+######                 ######
+
+def inputsR1()->Tuple:
     yi = None
     yf = None
-    IN = input("Ingrese el año inicial y el año final:\nex. '2014 2021'\n")
     digits = '0123456789'
-    prev_was_number = None
-    value = ''
-    value_count = 0
+    only_numbers = True
     while True:
-        for i in IN:
-            if i in digits:
-                if prev_was_number == None or prev_was_number and i in digits and len(value) < 4:
-                    value+=i
-                    prev_was_number = True
-                elif i not in digits:
-                    prev_was_number = False
-                    value = ''
-                if len(value) == 4:
-                    if value_count == 0:
-                        yi = value
-                        value = ''
-                        value_count+=1
-                    elif value_count == 1:
-                        yf = value
-                        value = ''
-                        value_count+=1  
-        #check values
-        if value_count == 2:
-            if len(str(yi)) < 4 or len(str(yf)) < 4:
-                print('Introduce años validos pls :D')
-            elif yf < yi:
-                print('Por favor ingresar el año menor como inicial y el mayor como final.')
-            else:
+        INi = input("Ingrese el año inicial: \n").strip()
+        INf = input("Ingrese el año final: \n").strip()
+        for i in INi:
+            if i not in digits :
+                only_numbers = False
                 break
+        for j in INf:
+            if j not in digits:
+                only_numbers = False
+                break
+        if not only_numbers:
+            print('Introduce años validos pls :D')
+            continue
+        else:
+            yi = int(INi) 
+            yf = int(INf)
+        #check values
+        if len(str(yi)) < 4 or len(str(yf)) < 4:
+            print('Introduce años validos pls :D')
+        elif yf < yi:
+            print('Por favor ingresar el año menor como inicial y el mayor como final.')
+        else:
+            break
     print(f'Se usaran los años {yi} como inicial y {yf} como final.\n')
     return yi,yf
 
-def listar_cronologicamente_artists(yi: int,yf: int,d_structure): #REQUERIMIENTO 1
+def sortingR1(ltlista,inputSortingR1):
+    lista_organizada = None
+    if int(inputSortingR1[0]) == 1:
+        sortret = controller.insert(ltlista)
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    elif int(inputSortingR1[0]) == 2:
+        sortret = controller.merge(ltlista)
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    elif int(inputSortingR1[0]) == 3:
+        sortret = controller.quick(ltlista)
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    elif int(inputSortingR1[0]) == 4:
+        sortret = controller.shell(ltlista)
+        time = sortret[1]
+        lista_organizada = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms')
+    return lista_organizada
+
+def sortingPrintR1(ltlist):
+    entrada = input("""Seleccione el algoritmo de ordenamiento
+             1 - Insertionsort
+             2 - Mergesort
+             3 - Quicksort
+             4 - Shellsort\n""")
+    print('Copiando temporalmente el catalogo antiguo...')
+    temp = {'ltlist':ltlist}
+    print('Proceso de sorting iniciado...')
+    ltlist = None 
+    print(type(entrada))
+    ltlist = sortingR1(entrada,temp['ltlist'])
+    del temp
+    print('¡Artistas organizados cronologicamente!')
+
+def callToRunR1(yi: int,yf: int,d_structure): 
     key = 'deathday'
     # 1. Filtrar el catalogo con range(yi,yf+1) usando cmp functions
-    artists_by_year = controller.listar_cronologicamente_artists(d_structure,key,yi,yf)
+    artists_by_year = controller.createLtListR1(d_structure,key,yi,yf)
     # 2. Hacer sort
-    artists_by_yearSorted = sortingPrintsArtists(artists_by_year)
+    artists_by_yearSorted = sortingPrintR1(artists_by_year)
     print(artists_by_yearSorted)
     return artists_by_yearSorted
 
-def print_requisito1(artists_sorted):
+def printR1(artists_sorted):
     pass
+
+######                             ######
+######                             ######
+######   VALORES PREDETERMINADOS   ######
+######                             ######
+######                             ######
 
 sorted = False
 sublist_input_runs = 0
@@ -266,9 +310,11 @@ catalog = None
 d_structure = "LINKED_LIST"
 complete_catalog = False
 
-"""
-Menu principal
-"""
+######                        ######
+######                        ######
+######     MENU PRINCIPAL     ######
+######                        ######
+######                        ######
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
@@ -311,9 +357,10 @@ while True:
             sortingPrints(catalog = catalog)
             sorted = True
     elif int(inputs[0]) == 5: #LISTAR CRONOLOGICAMENTE LOS ARTISTAS
-        yi, yf = listar_cronologicamente_artistsPrint()
-        print('\n\n\n\nNO SE CREARA UN NUEVO CATALOGO TEMPORAL ->\n\n\n\n')
-        artists_by_year = listar_cronologicamente_artists(yi,yf,d_structure)
+        yi, yf = inputsR1()
+        print('\n\n\n\nSE CREARA UN NUEVO CATALOGO TEMPORAL ->\n\n\n\n')
+        artists_by_year = callToRunR1(yi,yf,d_structure)
+        printR1(artists_by_year)
     else:
         sys.exit(0)
 sys.exit(0)
