@@ -49,6 +49,67 @@ def newCatalog(d_structure):
     catalog['artists'] = lt.newList(d_structure)
     return catalog
 
+
+######                     ######
+######                     ######
+######   REQUISITO 1 y 2   ######
+######                     ######
+######                     ######
+
+def createVoidListR1R2(key,target,d_structure):
+    cmpfunction = None
+    if target == 'artists':
+        cmpfunction = cmpArtistsByYear
+    elif target == 'artworks':
+        cmpfunction = cmpArtworkByDateAcquired
+    targetListVoid = lt.newList(d_structure,cmpfunction,key)
+    return targetListVoid
+        
+def addArtistR1R2(targetList, artist):
+    artistnew = newArtist()
+    addInfoArtist(artistnew,artist)
+    lt.addLast(targetList,artistnew)
+
+def addArtworkR1R2(targetList, artwork):
+    artworknew = newArtwork()
+    addInfoArtwork(artworknew,artwork)
+    lt.addLast(targetList,artworknew)
+
+def cmpArtworkByDateAcquired(artwork1, artwork2):
+    """
+    Devuelve verdadero (True) si el 'DateAcquired' de artwork1 es menores que el de artwork2
+    Args:
+        artwork1: informacion de la primera obra que incluye su valor 'DateAcquired'
+        artwork2: informacion de la segunda obra que incluye su valor 'DateAcquired'
+    """
+    ret = False
+    if artwork1['fecha de adquisicion'] != '' :
+        date1 = datetime.date.fromisoformat(artwork1['fecha de adquisicion'])
+    else:
+        date1 = datetime.date.today()
+    if artwork2['fecha de adquisicion'] != '':
+        date2 = datetime.date.fromisoformat(artwork2['fecha de adquisicion'])
+    else:
+        date2 = datetime.date.today()
+    if date1 < date2:
+        ret = True
+    return ret
+
+def cmpArtistsByYear(artist1: int, artist2: int):
+    year1 = artist1['birthday']
+    year2 = artist2['birthday']
+    ret = False
+    if year1 < year2:
+        ret = True
+    return ret
+
+######                  ######
+######                  ######
+######   SUBFUNCTIONS   ######
+######                  ######
+######                  ######
+
+
 def createSublist(catalog,pos,value):
     max_artists = lt.size(catalog['artists'])
     max_artworks = lt.size(catalog['artworks'])
@@ -62,12 +123,6 @@ def createSublist(catalog,pos,value):
     catalog['artworks'] = lt.subList(temp['artworks'],pos,amount_artworks)
     del temp
     return catalog
-
-def newArtistsList(d_structure: str,key: str):
-    cmpfunction = cmpArtistsByYear
-    key = 'birthday'
-    artists_by_year = lt.newList(d_structure,cmpfunction, key)
-    return artists_by_year
 
 # Funciones para agregar informacion al catalogo
 def addArtist(catalog, artist):
@@ -85,12 +140,6 @@ def addArtwork(catalog, artwork):
     artworknew = newArtwork()
     addInfoArtwork(artworknew,artwork)
     lt.addLast(catalog['artworks'],artworknew)
-
-def addArtistBornInRange(yartist: dict,yrange:range, artists_by_year):
-    artistdummy = newArtist()
-    addInfoArtist(artistdummy,yartist)
-    if int(artistdummy['birthday']) in yrange:
-        lt.addLast(artists_by_year,artistdummy)
 
 # Funciones para agregar informacion a los diccionarios de artistas y artworks
 def addInfoArtist(artistnew,artist):
@@ -132,79 +181,44 @@ def newArtwork():
     artworknew = {'title':None,'fecha de adquisicion':None,'medio':None,'dimensiones':None,'artistID':None}
     return artworknew
 
-# FUNCIONES DE COMPARACION
-
-def cmpArtworkByDateAcquired(artwork1, artwork2):
-    """
-    Devuelve verdadero (True) si el 'DateAcquired' de artwork1 es menores que el de artwork2
-    Args:
-        artwork1: informacion de la primera obra que incluye su valor 'DateAcquired'
-        artwork2: informacion de la segunda obra que incluye su valor 'DateAcquired'
-    """
-    ret = False
-    if artwork1['fecha de adquisicion'] != '' :
-        date1 = datetime.date.fromisoformat(artwork1['fecha de adquisicion'])
-    else:
-        date1 = datetime.date.today()
-    if artwork2['fecha de adquisicion'] != '':
-        date2 = datetime.date.fromisoformat(artwork2['fecha de adquisicion'])
-    else:
-        date2 = datetime.date.today()
-    if date1 < date2:
-        ret = True
-    return ret
-
-def test_cmp ():
-    d1 = '2029-10-06'
-    d2 = ''
-    dic1 = {'fecha de adquisicion':d1}
-    dic2 = {'fecha de adquisicion':d2}
-    print(cmpArtworkByDateAcquired(dic1,dic2))
-    #today's date for d2 and print False
-    """
-    start_time = time.process_time()
-    sa.sort(sub_list, compareratings)
-    stop_time = time.process_time()
-    elapsed_time_mseg = (stop_time - start_time)*1000
-    return elapsed_time_mseg
-    """
-
-def cmpArtistsByYear(year1: int, year2: int):
-    ret = False
-    if year1 < year2:
-        ret = True
-    return ret
-
 # SORTING
 
-def insertionsorting(catalog):
+def insertionsorting(lst, target):
     cmpfunction = cmpArtworkByDateAcquired
+    if target == 'artists':
+        cmpfunction = cmpArtistsByYear
     start_time = time.process_time()
-    ordenada = insertion.sort(catalog,cmpfunction)
+    ordenada = insertion.sort(lst,cmpfunction)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return (ordenada, f'time: {elapsed_time_mseg}')
 
-def mergesorting(catalog):
+def mergesorting(lst, target):
     cmpfunction = cmpArtworkByDateAcquired
+    if target == 'artists':
+        cmpfunction = cmpArtistsByYear
     start_time = time.process_time()
-    ordenada = merge.sort(catalog, cmpfunction)
+    ordenada = merge.sort(lst, cmpfunction)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return (ordenada, f'time: {elapsed_time_mseg}')
      
-def quicksorting(catalog):
+def quicksorting(lst, target):
     cmpfunction = cmpArtworkByDateAcquired
+    if target == 'artists':
+        cmpfunction = cmpArtistsByYear
     start_time = time.process_time()
-    ordenada = quick.sort(catalog, cmpfunction)
+    ordenada = quick.sort(lst, cmpfunction)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return (ordenada, f'time: {elapsed_time_mseg}')
     
-def shellsorting(catalog):
+def shellsorting(lst, target):
     cmpfunction = cmpArtworkByDateAcquired
+    if target == 'artists':
+        cmpfunction = cmpArtistsByYear
     start_time = time.process_time()
-    ordenada = shell.sort(catalog, cmpfunction)
+    ordenada = shell.sort(lst, cmpfunction)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return (ordenada, f'time: {elapsed_time_mseg}')

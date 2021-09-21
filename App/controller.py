@@ -27,6 +27,7 @@ El controlador se encarga de mediar entre la vista y el modelo.
 import config as cf
 import model
 import csv
+import datetime
 
 def initCatalog(d_structure):
     """
@@ -35,13 +36,58 @@ def initCatalog(d_structure):
     catalog = model.newCatalog(d_structure)
     return catalog
 
+
+######                     ######
+######                     ######
+######   REQUISITO 1 y 2   ######
+######                     ######
+######                     ######
+
+def createListR1R2(key,target, d_structure):
+    targetList = model.createVoidListR1R2(key,target,d_structure)
+    return targetList
+
+def loadTargetR1R2(targetList,target,datei,datef):
+    if target == 'artists':
+        loadArtistsR1R2(targetList,datei,datef)
+    elif target == 'artworks':
+        loadArtworksR1R2(targetList,datei,datef)
+
+def loadArtistsR1R2(targetList,datei,datef):
+    """
+    Carga el archivo de artistas y lo agrega al catalogo de artistas.
+    """
+    artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
+    artistsFile = csv.DictReader(open(artistsfile, encoding='utf-8'))
+    for artist in artistsFile:
+        dartist = int(artist['BeginDate'])
+        if int(datei) <= dartist and int(datef) >= dartist:
+            model.addArtistR1R2(targetList,artist)
+    
+def loadArtworksR1R2(targetList,datei,datef):
+    """
+    Carga el archivo de obras y lo agrega al catalogo de obras.
+    """
+    di = datetime.date.fromisoformat(datei)
+    df = datetime.date.fromisoformat(datef)
+    artworksfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
+    artworksFile = csv.DictReader(open(artworksfile, encoding='utf-8'))
+    for artwork in artworksFile:
+        dartwork = artwork['DateAcquired']
+        if dartwork != '':
+            dartwork = datetime.date.fromisoformat(dartwork)
+            if di <= dartwork and df >= dartwork:
+                model.addArtworkR1R2(targetList,artwork)
+
+######                  ######
+######                  ######
+######   SUBFUNCTIONS   ######
+######                  ######
+######                  ######
+
+
 def createSublist(catalog,pos,value):
     return model.createSublist(catalog,pos,value)
-
-def createLtListR1(d_structure,key,yi,yf):
-    artists_by_year = model.newArtistsList(d_structure,key)
-    loadArtistsByYear(artists_by_year,yi,yf)
-    return artists_by_year
     
 def loadData(catalog):
     """
@@ -60,13 +106,6 @@ def loadArtists(catalog):
     for artist in artistsFile:
         model.addArtist(catalog,artist)
 
-def loadArtistsByYear(artists_by_year,yi,yf):
-    yrange = range(yi,yf+1)
-    artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
-    artistsFile = csv.DictReader(open(artistsfile, encoding='utf-8'))
-    for artist in artistsFile:
-        model.addArtistBornInRange(artist,yrange,artists_by_year)
-
 def loadArtworks(catalog):
     """
     Carga el archivo de obras y lo agrega al catalogo de obras.
@@ -76,14 +115,14 @@ def loadArtworks(catalog):
     for artwork in artworksFile:
         model.addArtwork(catalog,artwork)
     
-def insert(catalog):
-    return model.insertionsorting(catalog)
+def insert(catalog,target):
+    return model.insertionsorting(catalog, target)
 
-def merge(catalog):
-    return model.mergesorting(catalog)
+def merge(catalog,target):
+    return model.mergesorting(catalog, target)
 
-def quick(catalog):
-    return model.quicksorting(catalog)
+def quick(catalog,target):
+    return model.quicksorting(catalog, target)
 
-def shell(catalog):
-    return model.shellsorting(catalog)
+def shell(catalog,target):
+    return model.shellsorting(catalog,target)

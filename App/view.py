@@ -27,6 +27,7 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
+import datetime
 
 """
 La vista se encarga de la interacción con el usuario
@@ -150,45 +151,45 @@ def sublist_creator(value: float, catalog, complete_catalog: bool,sorted: bool,d
     evaluated = False
     pos = 1
     if catalog != None and complete_catalog and not sorted:
-        sortingPrints(catalog = catalog)
+        sortingPrints(catalog, None)
         sorted = True
         evaluated = True
     elif catalog == None:
         catalog = create_catalog_complete(d_structure)
         complete_catalog = True
-        sortingPrints(catalog = catalog)
+        sortingPrints(catalog, None)
         sorted = True
         evaluated = True
     elif catalog != None and not complete_catalog:
         del catalog
         catalog = create_catalog_complete(d_structure)
         complete_catalog = True
-        sortingPrints(catalog = catalog)
+        sortingPrints(catalog, None)
         sorted = True
         evaluated = True
     if evaluated:
         catalog = controller.createSublist(catalog,pos,value)
     return catalog
 
-def sorting(entrada,catalog):
+def sorting(entrada,catalog, target):
     lista_organizada = None
     if int(entrada[0]) == 1:
-        sortret = controller.insert(catalog['artworks'])
+        sortret = controller.insert(catalog['artworks'], target)
         time = sortret[1]
         lista_organizada = sortret[0]
         print(f'Se organizaron los archivos correctamente en {time}ms')
     elif int(entrada[0]) == 2:
-        sortret = controller.merge(catalog['artworks'])
+        sortret = controller.merge(catalog['artworks'], target)
         time = sortret[1]
         lista_organizada = sortret[0]
         print(f'Se organizaron los archivos correctamente en {time}ms')
     elif int(entrada[0]) == 3:
-        sortret = controller.quick(catalog['artworks'])
+        sortret = controller.quick(catalog['artworks'],target)
         time = sortret[1]
         lista_organizada = sortret[0]
         print(f'Se organizaron los archivos correctamente en {time}ms')
     elif int(entrada[0]) == 4:
-        sortret = controller.shell(catalog['artworks'])
+        sortret = controller.shell(catalog['artworks'], target)
         time = sortret[1]
         lista_organizada = sortret[0]
         print(f'Se organizaron los archivos correctamente en {time}ms')
@@ -204,99 +205,147 @@ def sortingPrints(catalog):
     temp = catalog.copy()
     print('Proceso de sorting iniciado...')
     del catalog['artworks'] 
-    catalog['artworks'] = sorting(entrada,temp)
+    catalog['artworks'] = sorting(entrada,temp, None)
     del temp
     print('¡Artworks organizados!')
     print_catalog_elements(catalog)
 
-######                 ######
-######                 ######
-######   REQUISITO 1   ######
-######                 ######
-######                 ######
+######                     ######
+######                     ######
+######   REQUISITO 1 y 2   ######
+######                     ######
+######                     ######
 
-def inputsR1()->Tuple:
+def inputsR1R2(R1,R2)->Tuple:
     yi = None
     yf = None
+    mi = None
+    mf = None
+    di = None
+    df = None
     digits = '0123456789'
     only_numbers = True
+    datei = None
+    datef = None
+    req = None
+    if R1:
+        req = 1
+    elif R2:
+        req = 2
     while True:
-        INi = input("Ingrese el año inicial: \n").strip()
-        INf = input("Ingrese el año final: \n").strip()
-        for i in INi:
-            if i not in digits :
-                only_numbers = False
+        if R1:
+            INi = input("Ingrese la fecha inicial (YYYY): \n").strip()
+            INf = input("Ingrese la fecha final (YYYY): \n").strip()
+            for i in INi:
+                if i not in digits :
+                    only_numbers = False
+                    break
+            for j in INf:
+                if j not in digits:
+                    only_numbers = False
+                    break
+            if not only_numbers:
+                print('Introduce años validos pls :D')
+                continue
+            else:
+                yi = int(INi) 
+                yf = int(INf)
+            if len(str(yi)) < 4 or len(str(yf)) < 4:
+                print('Introduce años validos pls :D')
+            elif yf < yi:
+                print('Por favor ingresar el año menor como inicial y el mayor como final.')
+            else:
+                datef = yf
+                datei = yi
                 break
-        for j in INf:
-            if j not in digits:
-                only_numbers = False
-                break
-        if not only_numbers:
-            print('Introduce años validos pls :D')
-            continue
-        else:
-            yi = int(INi) 
-            yf = int(INf)
-        #check values
-        if len(str(yi)) < 4 or len(str(yf)) < 4:
-            print('Introduce años validos pls :D')
-        elif yf < yi:
-            print('Por favor ingresar el año menor como inicial y el mayor como final.')
-        else:
-            break
-    print(f'Se usaran los años {yi} como inicial y {yf} como final.\n')
-    return yi,yf
-
-def sortingR1(ltlista,inputSortingR1):
-    lista_organizada = None
-    if int(inputSortingR1[0]) == 1:
-        sortret = controller.insert(ltlista)
-        time = sortret[1]
-        lista_organizada = sortret[0]
-        print(f'Se organizaron los archivos correctamente en {time}ms')
-    elif int(inputSortingR1[0]) == 2:
-        sortret = controller.merge(ltlista)
-        time = sortret[1]
-        lista_organizada = sortret[0]
-        print(f'Se organizaron los archivos correctamente en {time}ms')
-    elif int(inputSortingR1[0]) == 3:
-        sortret = controller.quick(ltlista)
-        time = sortret[1]
-        lista_organizada = sortret[0]
-        print(f'Se organizaron los archivos correctamente en {time}ms')
-    elif int(inputSortingR1[0]) == 4:
-        sortret = controller.shell(ltlista)
-        time = sortret[1]
-        lista_organizada = sortret[0]
-        print(f'Se organizaron los archivos correctamente en {time}ms')
-    return lista_organizada
-
-def sortingPrintR1(ltlist):
-    entrada = input("""Seleccione el algoritmo de ordenamiento
+        elif R2:
+            INiList = input("Ingrese la fecha inicial (YYYY-MM-DD) : \n").strip().split('-')
+            INfList = input("Ingrese la fecha final (YYYY-MM-DD) : \n").strip().split('-')
+            if len(INiList) == 3 and len(INfList) == 3:
+                yi = INiList[0]
+                mi = INiList[1]
+                di = INiList[2]
+                yf = INfList[0]
+                mf = INfList[1]
+                df = INfList[2]
+                datei = f'{yi}-{mi}-{di}'
+                datef = f'{yf}-{mf}-{df}'
+                for i in INiList:
+                    for j in i:
+                        if j not in digits:
+                            only_numbers = False
+                for k in INfList:
+                    for l in k:
+                        if l not in digits:
+                            only_numbers = False
+                #check
+                if not only_numbers:
+                    print('Introduce años validos pls :D')
+                    continue
+                else:
+                    datetimeDatei = datetime.date.fromisoformat(datei)
+                    datetimeDatef = datetime.date.fromisoformat(datef)
+                if datetimeDatei > datetimeDatef:
+                    print('Por favor ingresar el año menor como inicial y el mayor como final.')
+                    continue
+                else:
+                    break
+            else:
+                print('Introduce fechas validas pls :D')
+    print(f'Se usara la fecha {datei} como fecha inicial y {datef} como fecha final')
+    return (datei,datef,req)
+    
+def sortR1R2(targetList,target):
+    IN = input("""Seleccione el algoritmo de ordenamiento
              1 - Insertionsort
              2 - Mergesort
              3 - Quicksort
              4 - Shellsort\n""")
-    print('Copiando temporalmente el catalogo antiguo...')
-    temp = {'ltlist':ltlist}
-    print('Proceso de sorting iniciado...')
-    ltlist = None 
-    print(type(entrada))
-    ltlist = sortingR1(entrada,temp['ltlist'])
-    del temp
-    print('¡Artistas organizados cronologicamente!')
+    targetListSorted = None
+    if int(IN[0]) == 1:
+        sortret = controller.insert(targetList, target)
+        time = sortret[1]
+        targetListSorted = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms\n')
+    elif int(IN[0]) == 2:
+        sortret = controller.merge(targetList, target)
+        time = sortret[1]
+        targetListSorted = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms\n')
+    elif int(IN[0]) == 3:
+        sortret = controller.quick(targetList, target)
+        time = sortret[1]
+        targetListSorted = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms\n')
+    elif int(IN[0]) == 4:
+        sortret = controller.shell(targetList, target)
+        time = sortret[1]
+        targetListSorted = sortret[0]
+        print(f'Se organizaron los archivos correctamente en {time}ms\n')
+    return targetListSorted
 
-def callToRunR1(yi: int,yf: int,d_structure): 
-    key = 'deathday'
-    # 1. Filtrar el catalogo con range(yi,yf+1) usando cmp functions
-    artists_by_year = controller.createLtListR1(d_structure,key,yi,yf)
-    # 2. Hacer sort
-    artists_by_yearSorted = sortingPrintR1(artists_by_year)
-    print(artists_by_yearSorted)
-    return artists_by_yearSorted
-
-def printR1(artists_sorted):
-    pass
+def controllerR1R2(key,target,datei,datef, d_structure):
+    print("Cargando información de los archivos ....")
+    targetList = controller.createListR1R2(key,target, d_structure)
+    controller.loadTargetR1R2(targetList,target,datei,datef)
+    targetListSorted = sortR1R2(targetList,target)
+    return targetListSorted
+    
+def vizualizationR1R2(targetListSorted,target):
+    #date for artwork: 1944-06-06   1989-09-09
+    first = lt.getElement(targetListSorted,1)
+    second = lt.getElement(targetListSorted,2)
+    third = lt.getElement(targetListSorted,3)
+    secondToLast = lt.getElement(targetListSorted,lt.size(targetListSorted)-2)
+    nextToLast = lt.getElement(targetListSorted,lt.size(targetListSorted)-1)
+    last = lt.getElement(targetListSorted,lt.size(targetListSorted))
+    preview = [first,second,third,secondToLast,nextToLast,last]
+    if target == 'artists':
+        for i in preview:
+            print(f"NAME: {i['name']} | BIRTHDAY: {i['birthday']} | R.I.P {i['deathday']} | NATIONALITY: {i['nationality']} | GENERO: {i['gender']}\n\n")
+    elif target == 'artworks':
+        for i in preview:
+            print(f"TITLE: {i['title']} | AUTHORID: {i['AuthorID']} | DATE {i['fecha de adquisicion']} | MEDIO: {i['medio']} | DIMENSIONES: {i['dimensiones']}\n\n")
 
 ######                             ######
 ######                             ######
@@ -309,12 +358,15 @@ sublist_input_runs = 0
 catalog = None
 d_structure = "LINKED_LIST"
 complete_catalog = False
+statusR1 = False
+statusR2 = False
 
 ######                        ######
 ######                        ######
 ######     MENU PRINCIPAL     ######
 ######                        ######
 ######                        ######
+
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
@@ -352,15 +404,47 @@ while True:
             print('Oops, primero carga la informacion.')
             continue
         elif sorted:
-            print('Ya ordenaste este catalogo.')
+            print('Este catalogo ya esta organizado.')
         else:
-            sortingPrints(catalog = catalog)
+            sortingPrints(catalog, None)
             sorted = True
-    elif int(inputs[0]) == 5: #LISTAR CRONOLOGICAMENTE LOS ARTISTAS
-        yi, yf = inputsR1()
-        print('\n\n\n\nSE CREARA UN NUEVO CATALOGO TEMPORAL ->\n\n\n\n')
-        artists_by_year = callToRunR1(yi,yf,d_structure)
-        printR1(artists_by_year)
+    elif int(inputs[0]) == 5 or int(inputs[0]) == 6: #LISTAR CRONOLOGICAMENTE LOS ARTISTAS O ARTWORKS
+        R1,R2 = False, False
+        if int(inputs[0]) == 5:
+            R1 = True
+        elif int(inputs[0]) == 6:
+            R2 = True
+        if R1:
+            if statusR1:
+                print('Ya creaste usaste esta funcionalidad anteriormente, te visualizare los datos.')
+                vizualizationR1R2(targetListSorted,target)
+                continue
+        elif R2:
+            if statusR2:
+                print('Ya creaste usaste esta funcionalidad anteriormente, te visualizare los datos.')
+                vizualizationR1R2(targetListSorted,target)
+                continue
+        inputsR12 = inputsR1R2(R1,R2)
+        datei = inputsR12[0]
+        datef = inputsR12[1]
+        req = inputsR12[2]
+        #check if ran before
+        if req == 1:
+            target = 'artists'
+            key = 'BeginDate'
+        elif req == 2:
+            target = 'artworks'
+            key = 'DateAcquired'
+        if datei == None or datef == None or req == None:
+            print('Hay inputs incorrectos, por favor iniciar nuevamente.')
+            continue
+        else:
+            targetListSorted = controllerR1R2(key,target,datei,datef, d_structure)
+            vizualizationR1R2(targetListSorted,target)
+            if req == 1:
+                statusR1 = True
+            elif req == 2:
+                statusR2 = True
     else:
         sys.exit(0)
 sys.exit(0)
