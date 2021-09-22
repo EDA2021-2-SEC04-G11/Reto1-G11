@@ -331,7 +331,7 @@ def controllerR1R2(key,target,datei,datef, d_structure):
     targetListSorted = sortR1R2(targetList,target)
     return targetListSorted
     
-def vizualizationR1R2(targetListSorted,target):
+def visualizationR1R2(targetListSorted,target):
     #date for artwork: 1944-06-06   1989-09-09
     first = lt.getElement(targetListSorted,1)
     second = lt.getElement(targetListSorted,2)
@@ -346,6 +346,57 @@ def vizualizationR1R2(targetListSorted,target):
     elif target == 'artworks':
         for i in preview:
             print(f"TITLE: {i['title']} | AUTHORID: {i['AuthorID']} | DATE {i['fecha de adquisicion']} | MEDIO: {i['medio']} | DIMENSIONES: {i['dimensiones']}\n\n")
+
+######                 ######
+######                 ######
+######   REQUISITO 5   ######
+######                 ######
+######                 ######
+
+def inputR5():
+    department = input('Ingrese el departamento el cual desea investigar: \n')
+    return department
+
+def controllerR5(key,target,d_structure,department)-> tuple:
+    print("Cargando información de los archivos ....")
+    targetList = controller.createListR1R2(key,target, d_structure)
+    targetListSorted = sortR1R2(targetList,'artists')
+    collection = controller.loadArtworksR5(targetListSorted,department)
+    pricef = collection[0]
+    weightf = collection[1]
+    top5 = collection[2]
+    return targetListSorted, pricef, weightf, top5
+
+def visualizationR5(targetListSorted,pricef,weightf,top5):
+    #         Drawings & Prints
+    print(f'Estimated cargo weight (kg): {weightf}')
+    print(f'Estimated cargo cost (USD): {pricef}')
+    print(f'Estimated number of elements in the cargo: {lt.size(targetListSorted)}') 
+    #####
+    print('\nTOP 5 OLDEST ARTWORKS ->\n\n')
+    for i in range(1,6):
+        element = lt.getElement(targetListSorted,i)
+        titulo = element['title']
+        artistas = element['autores']
+        clasificacion = element['clasificacion']
+        fecha = element['fecha']
+        medio = element['medio']
+        dimensiones = element['dimensiones']
+        costo = element['costo transporte']
+        print(f'TITULO: {titulo} | ARTISTA(S): {artistas} | CLASIFICACION: {clasificacion} | FECHA DE LA OBRA: {fecha} | MEDIO: {medio} | DIMENSIONES: {dimensiones} | COSTO DE TRANSPORTE: {costo}\n')
+    #####
+    print('\nTOP 5 BY COST ->\n\n')
+    for i in top5:
+        element = lt.getElement(targetListSorted,i[0])
+        titulo = element['title']
+        artistas = element['autores']
+        clasificacion = element['clasificacion']
+        fecha = element['fecha']
+        medio = element['medio']
+        dimensiones = element['dimensiones']
+        costo = element['costo transporte']
+        print(f'TITULO: {titulo} | ARTISTA(S): {artistas} | CLASIFICACION: {clasificacion} | FECHA DE LA OBRA: {fecha} | MEDIO: {medio} | DIMENSIONES: {dimensiones} | COSTO DE TRANSPORTE: {costo}\n')
+
 
 ######                             ######
 ######                             ######
@@ -417,12 +468,12 @@ while True:
         if R1:
             if statusR1:
                 print('Ya creaste usaste esta funcionalidad anteriormente, te visualizare los datos.')
-                vizualizationR1R2(targetListSorted,target)
+                visualizationR1R2(targetListSorted,target)
                 continue
         elif R2:
             if statusR2:
                 print('Ya creaste usaste esta funcionalidad anteriormente, te visualizare los datos.')
-                vizualizationR1R2(targetListSorted,target)
+                visualizationR1R2(targetListSorted,target)
                 continue
         inputsR12 = inputsR1R2(R1,R2)
         datei = inputsR12[0]
@@ -440,11 +491,19 @@ while True:
             continue
         else:
             targetListSorted = controllerR1R2(key,target,datei,datef, d_structure)
-            vizualizationR1R2(targetListSorted,target)
+            visualizationR1R2(targetListSorted,target)
             if req == 1:
                 statusR1 = True
             elif req == 2:
                 statusR2 = True
+    elif  int(inputs[0]) == 9:
+        department = inputR5()
+        OUT = controllerR5(None,'artworks',d_structure,department)
+        artworksListSorted = OUT[0]
+        pricef = OUT[1]
+        weightf = OUT[2]
+        top5 = OUT[3]
+        visualizationR5(artworksListSorted,pricef,weightf,top5)
     else:
         sys.exit(0)
 sys.exit(0)

@@ -70,9 +70,9 @@ def addArtistR1R2(targetList, artist):
     addInfoArtist(artistnew,artist)
     lt.addLast(targetList,artistnew)
 
-def addArtworkR1R2(targetList, artwork):
+def addArtworkR1R2(targetList, artwork, price):
     artworknew = newArtwork()
-    addInfoArtwork(artworknew,artwork)
+    addInfoArtwork(artworknew,artwork,price)
     lt.addLast(targetList,artworknew)
 
 def cmpArtworkByDateAcquired(artwork1, artwork2):
@@ -102,6 +102,86 @@ def cmpArtistsByYear(artist1: int, artist2: int):
     if year1 < year2:
         ret = True
     return ret
+
+######                 ######
+######                 ######
+######   REQUISITO 5   ######
+######                 ######
+######                 ######
+
+def getPriceR5(artwork,top5,ipos)->float:
+    """
+    Obtiene el precio de cada obra y lo retorna
+    """
+    #ipos is the position of current artwork in the lt.list
+    # height, lenght, depth, width
+    methods = []
+    rate = 72
+    pi = 3.141592
+    priceStandard = 48
+    highest = 0
+    top5c = top5
+    h =  artwork['Height (cm)']
+    l =  artwork['Length (cm)']
+    d =  artwork['Depth (cm)']
+    w =  artwork['Width (cm)']
+    area = 0
+    volumen = 0
+    hbool,lbool,dbool,wbool = False,False,False,False
+    if h != '':
+        h = float(h)/100
+        hbool = True
+    elif l != '':
+        l = float(h)/100
+        lbool = True
+    if d != '':
+        d = float(h)/100
+        dbool = True
+    if w != '':
+        w = float(h)/100
+        wbool = True
+    ######
+    areal = []
+    print(hbool,lbool,dbool,wbool)
+    if hbool and dbool:
+        areal.append(h*d)
+    if lbool and dbool:
+        areal.append(l*d)
+    if hbool and wbool:
+        areal.append(h*w)
+    if lbool and wbool:
+        areal.append(l*w)
+    if wbool and dbool:
+        areal.append(w*d)
+    if len(areal) > 1:
+        area = max(areal)
+    elif len(areal) < 1 and len(areal) != 0:
+        area = areal[0]
+    if hbool and dbool and wbool:
+        volumen = h*d*w
+    elif lbool and dbool and wbool:
+        volumen = l*d*w
+    ######
+    if area != 0:
+        methods.append(area*rate)
+    if volumen != 0:
+        methods.append(volumen*rate)
+    ################
+    if len(methods) == 0:
+        highest = priceStandard
+    else:
+        for i in methods:
+            pricei = rate*i
+            if pricei > highest:
+                highest = pricei
+    if top5c == [] or len(top5c) < 5:
+        top5.append((ipos,highest))
+    else:
+        for i in range(len(top5c)):
+            if highest > top5c[i][1]:
+                top5c[i] = (ipos,highest)
+    print(methods)
+    return highest,top5c
 
 ######                  ######
 ######                  ######
@@ -151,9 +231,8 @@ def addInfoArtist(artistnew,artist):
     artistnew['gender'] = artist['Gender']
     artistnew['birthday'] = artist['BeginDate']
     artistnew['ID'] = artist['ConstituentID']
-    artistnew['deathday'] = artist['EndDate']
     
-def addInfoArtwork(artworknew,artwork):
+def addInfoArtwork(artworknew,artwork,price):
     """
     Añade la información de una determinada obra.
     """
@@ -162,6 +241,15 @@ def addInfoArtwork(artworknew,artwork):
     artworknew['medio'] = artwork['Medium']
     artworknew['dimensiones'] = artwork['Dimensions']
     artworknew['AuthorID'] = artwork['ConstituentID']
+    artworknew['weight'] = artwork['Weight (kg)']
+    artworknew['height'] = artwork['Height (cm)']
+    artworknew['length'] = artwork['Length (cm)']
+    artworknew['width'] = artwork['Width (cm)']
+    artworknew['department'] = artwork['Department']
+    artworknew['clasificacion'] = artwork['Classification']
+    artworknew['fecha'] = artwork['Date']
+    artworknew['autores'] = artwork['CreditLine']
+    artworknew['costo transporte'] = price
 
 # Funciones para creacion de datos
 def newArtist():
@@ -177,8 +265,9 @@ def newArtwork():
     Crea una nueva obra.
     Retorna la obra.
     """
-
-    artworknew = {'title':None,'fecha de adquisicion':None,'medio':None,'dimensiones':None,'artistID':None}
+    artworknew = {'title':None,'fecha de adquisicion':None,'medio':None,'dimensiones':None,'artistID':None,
+    'weight':None,'height':None,'length':None,'width':None, 'department':None,'costo transporte':None,
+     'clasificacion':None, 'fecha':None, 'autores':None}
     return artworknew
 
 # SORTING

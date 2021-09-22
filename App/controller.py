@@ -77,7 +77,35 @@ def loadArtworksR1R2(targetList,datei,datef):
         if dartwork != '':
             dartwork = datetime.date.fromisoformat(dartwork)
             if di <= dartwork and df >= dartwork:
-                model.addArtworkR1R2(targetList,artwork)
+                model.addArtworkR1R2(targetList,artwork,'')
+
+######                 ######
+######                 ######
+######   REQUISITO 5   ######
+######                 ######
+######                 ######
+
+def loadArtworksR5(targetList,department):
+    """
+    Carga el archivo de obras y lo agrega al catalogo de obras.
+    """
+    top5 = []  # lista de 5 elementos donde cada uno se vera asi: (ipos,price)
+    ipos = 0
+    pricef = 0
+    weightf = 0
+    artworksfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
+    artworksFile = csv.DictReader(open(artworksfile, encoding='utf-8'))
+    for artwork in artworksFile:
+        if artwork['Department'] == department:
+            ipos += 1
+            collection = model.getPriceR5(artwork,top5,ipos)
+            price = collection[0]
+            top5 = collection[1]
+            model.addArtworkR1R2(targetList,artwork,price)
+            pricef += price
+            if artwork['Weight (kg)'] != '':
+                weightf += float(artwork['Weight (kg)'])
+    return pricef,weightf,top5
 
 ######                  ######
 ######                  ######
