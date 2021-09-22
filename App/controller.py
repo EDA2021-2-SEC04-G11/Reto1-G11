@@ -77,7 +77,50 @@ def loadArtworksR1R2(targetList,datei,datef):
         if dartwork != '':
             dartwork = datetime.date.fromisoformat(dartwork)
             if di <= dartwork and df >= dartwork:
-                model.addArtworkR1R2(targetList,artwork,'')
+                model.addArtworkR1R2(targetList,artwork,None)
+
+######                 ######
+######                 ######
+######   REQUISITO 3   ######
+######                 ######
+######                 ######
+
+def runFunctionsR3(author,d_structure):
+    id = getAuthorIdR3(author)
+    if id == None:
+        return None
+    collection = get_artworksListByIdR3(id,d_structure)
+    artworksListById = collection[0]
+    totalObras = model.get_size_artworksListByIdR3(artworksListById)
+    dictTecnicas = collection[1]
+    totalTecnicas = len(dictTecnicas.keys())
+    bestTecnica = model.get_bestTecnicaR3(dictTecnicas)
+    artworksListByBestTechnique = artworksListByBestTechniqueR3(artworksListById,bestTecnica,d_structure)
+    return artworksListByBestTechnique, totalObras, dictTecnicas,bestTecnica,totalTecnicas
+
+def getAuthorIdR3(author)->str:
+    id = None
+    artistsfile = cf.data_dir + 'MoMA/Artists-utf8-small.csv'
+    artistsFile = csv.DictReader(open(artistsfile, encoding='utf-8'))
+    for artist in artistsFile:
+        if author in artist['DisplayName']:
+            id = artist['ConstituentID']
+            break
+    return id
+
+def get_artworksListByIdR3(id: str,d_structure):
+    dictTecnicas = {}
+    artworksListById = model.create_artworksListR3(d_structure)
+    artworksfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
+    artworksFile = csv.DictReader(open(artworksfile, encoding='utf-8'))
+    for artwork in artworksFile:
+        if id in artwork['ConstituentID'].strip('[]').replace(' ','').split(','):
+            model.add_dictTecnicasR3(dictTecnicas,artwork)
+            model.add_artworksListR3(artworksListById,artwork)
+    return artworksListById, dictTecnicas
+
+def artworksListByBestTechniqueR3(artworksListById,bestTecnica,d_structure):
+    return model.create_artworksListByBestTechniqueR3(artworksListById,bestTecnica,d_structure)
 
 ######                 ######
 ######                 ######

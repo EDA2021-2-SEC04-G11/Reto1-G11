@@ -83,12 +83,12 @@ def cmpArtworkByDateAcquired(artwork1, artwork2):
         artwork2: informacion de la segunda obra que incluye su valor 'DateAcquired'
     """
     ret = False
-    if artwork1['fecha de adquisicion'] != '' :
-        date1 = datetime.date.fromisoformat(artwork1['fecha de adquisicion'])
+    if artwork1['DateAcquired'] != '' :
+        date1 = datetime.date.fromisoformat(artwork1['DateAcquired'])
     else:
         date1 = datetime.date.today()
-    if artwork2['fecha de adquisicion'] != '':
-        date2 = datetime.date.fromisoformat(artwork2['fecha de adquisicion'])
+    if artwork2['DateAcquired'] != '':
+        date2 = datetime.date.fromisoformat(artwork2['DateAcquired'])
     else:
         date2 = datetime.date.today()
     if date1 < date2:
@@ -105,6 +105,46 @@ def cmpArtistsByYear(artist1: int, artist2: int):
 
 ######                 ######
 ######                 ######
+######   REQUISITO 3   ######
+######                 ######
+######                 ######
+
+def create_artworksListR3(d_structure):
+    return lt.newList(d_structure)
+
+def add_artworksListR3(artworksList,artwork):
+    artworknew = newArtwork()
+    addInfoArtwork(artworknew,artwork,None)
+    lt.addLast(artworksList,artworknew)
+
+def get_size_artworksListByIdR3(artworksListById):
+    return lt.size(artworksListById)
+
+def add_dictTecnicasR3(dictTecnicas,artwork):
+    if dictTecnicas.get(artwork['Medium'],None) == None:
+        dictTecnicas[artwork['Medium']] = 1
+    else:
+        dictTecnicas[artwork['Medium']] += 1
+
+def get_bestTecnicaR3(dictTecnicas):
+    high = 0
+    best = None
+    for i in dictTecnicas.keys():
+        if dictTecnicas[i] >= high:
+            high = dictTecnicas[i]
+            best = i
+    return best
+
+def create_artworksListByBestTechniqueR3(artworksListById,bestTecnica,d_structure):
+    artworksListByBestTechnique = create_artworksListR3(d_structure)
+    for i in lt.iterator(artworksListById):
+        if i['Medium'].strip() == bestTecnica:
+            add_artworksListR3(artworksListByBestTechnique,i)
+    del artworksListById
+    return artworksListByBestTechnique
+
+######                 ######
+######                 ###### 
 ######   REQUISITO 5   ######
 ######                 ######
 ######                 ######
@@ -114,17 +154,17 @@ def getPriceR5(artwork,top5,ipos)->float:
     Obtiene el precio de cada obra y lo retorna
     """
     #ipos is the position of current artwork in the lt.list
-    # height, lenght, depth, width
+    # Height (cm), lenght, depth, Width (cm)
     methods = []
     rate = 72
     pi = 3.141592
     priceStandard = 48
     highest = 0
     top5c = top5
-    h =  artwork['Height (cm)']
-    l =  artwork['Length (cm)']
+    h =  artwork['Height (cm) (cm)']
+    l =  artwork['Length (cm) (cm)']
     d =  artwork['Depth (cm)']
-    w =  artwork['Width (cm)']
+    w =  artwork['Width (cm) (cm)']
     area = 0
     volumen = 0
     hbool,lbool,dbool,wbool = False,False,False,False
@@ -232,23 +272,25 @@ def addInfoArtist(artistnew,artist):
     artistnew['birthday'] = artist['BeginDate']
     artistnew['ID'] = artist['ConstituentID']
     
+    
 def addInfoArtwork(artworknew,artwork,price):
     """
     Añade la información de una determinada obra.
     """
-    artworknew['title'] = artwork['Title']
-    artworknew['fecha de adquisicion'] = artwork['DateAcquired']
-    artworknew['medio'] = artwork['Medium']
-    artworknew['dimensiones'] = artwork['Dimensions']
-    artworknew['AuthorID'] = artwork['ConstituentID']
-    artworknew['weight'] = artwork['Weight (kg)']
-    artworknew['height'] = artwork['Height (cm)']
-    artworknew['length'] = artwork['Length (cm)']
-    artworknew['width'] = artwork['Width (cm)']
-    artworknew['department'] = artwork['Department']
-    artworknew['clasificacion'] = artwork['Classification']
-    artworknew['fecha'] = artwork['Date']
-    artworknew['autores'] = artwork['CreditLine']
+    print(artwork['Title'])
+    artworknew['Title'] = artwork['Title']
+    artworknew['DateAcquired'] = artwork['DateAcquired']
+    artworknew['Medium'] = artwork['Medium']
+    artworknew['Dimensions'] = artwork['Dimensions']
+    artworknew['ConstituentID'] = artwork['ConstituentID']
+    artworknew['Weight (kg)'] = artwork['Weight (kg)']
+    artworknew['Height (cm)'] = artwork['Height (cm)']
+    artworknew['Length (cm)'] = artwork['Length (cm)']
+    artworknew['Width (cm)'] = artwork['Width (cm)']
+    artworknew['Department'] = artwork['Department']
+    artworknew['Classification'] = artwork['Classification']
+    artworknew['Date'] = artwork['Date']
+    artworknew['CreditLine'] = artwork['CreditLine']
     artworknew['costo transporte'] = price
 
 # Funciones para creacion de datos
@@ -265,9 +307,9 @@ def newArtwork():
     Crea una nueva obra.
     Retorna la obra.
     """
-    artworknew = {'title':None,'fecha de adquisicion':None,'medio':None,'dimensiones':None,'artistID':None,
-    'weight':None,'height':None,'length':None,'width':None, 'department':None,'costo transporte':None,
-     'clasificacion':None, 'fecha':None, 'autores':None}
+    artworknew = {'Title':None,'DateAcquired':None,'Medium':None,'Dimensions':None,'artistID':None,
+    'Weight (kg)':None,'Height (cm)':None,'Length (cm)':None,'Width (cm)':None, 'Department':None,'costo transporte':None,
+     'Classification':None, 'Date':None, 'CreditLine':None}
     return artworknew
 
 # SORTING

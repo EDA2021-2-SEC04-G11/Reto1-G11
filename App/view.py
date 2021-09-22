@@ -234,8 +234,8 @@ def inputsR1R2(R1,R2)->Tuple:
         req = 2
     while True:
         if R1:
-            INi = input("Ingrese la fecha inicial (YYYY): \n").strip()
-            INf = input("Ingrese la fecha final (YYYY): \n").strip()
+            INi = input("Ingrese la Date inicial (YYYY): \n").strip()
+            INf = input("Ingrese la Date final (YYYY): \n").strip()
             for i in INi:
                 if i not in digits :
                     only_numbers = False
@@ -259,8 +259,8 @@ def inputsR1R2(R1,R2)->Tuple:
                 datei = yi
                 break
         elif R2:
-            INiList = input("Ingrese la fecha inicial (YYYY-MM-DD) : \n").strip().split('-')
-            INfList = input("Ingrese la fecha final (YYYY-MM-DD) : \n").strip().split('-')
+            INiList = input("Ingrese la Date inicial (YYYY-MM-DD) : \n").strip().split('-')
+            INfList = input("Ingrese la Date final (YYYY-MM-DD) : \n").strip().split('-')
             if len(INiList) == 3 and len(INfList) == 3:
                 yi = INiList[0]
                 mi = INiList[1]
@@ -291,8 +291,8 @@ def inputsR1R2(R1,R2)->Tuple:
                 else:
                     break
             else:
-                print('Introduce fechas validas pls :D')
-    print(f'Se usara la fecha {datei} como fecha inicial y {datef} como fecha final')
+                print('Introduce Dates validas pls :D')
+    print(f'Se usara la Date {datei} como Date inicial y {datef} como Date final')
     return (datei,datef,req)
     
 def sortR1R2(targetList,target):
@@ -345,7 +345,7 @@ def visualizationR1R2(targetListSorted,target):
             print(f"NAME: {i['name']} | BIRTHDAY: {i['birthday']} | R.I.P {i['deathday']} | NATIONALITY: {i['nationality']} | GENERO: {i['gender']}\n\n")
     elif target == 'artworks':
         for i in preview:
-            print(f"TITLE: {i['title']} | AUTHORID: {i['AuthorID']} | DATE {i['fecha de adquisicion']} | MEDIO: {i['medio']} | DIMENSIONES: {i['dimensiones']}\n\n")
+            print(f"Title: {i['Title']} | ConstituentID: {i['ConstituentID']} | DATE {i['DateAcquired']} | Medium: {i['Medium']} | Dimensions: {i['Dimensions']}\n\n")
 
 ######                 ######
 ######                 ######
@@ -376,27 +376,88 @@ def visualizationR5(targetListSorted,pricef,weightf,top5):
     print('\nTOP 5 OLDEST ARTWORKS ->\n\n')
     for i in range(1,6):
         element = lt.getElement(targetListSorted,i)
-        titulo = element['title']
-        artistas = element['autores']
-        clasificacion = element['clasificacion']
-        fecha = element['fecha']
-        medio = element['medio']
-        dimensiones = element['dimensiones']
+        titulo = element['Title']
+        artistas = element['CreditLine']
+        Classification = element['Classification']
+        Date = element['Date']
+        Medium = element['Medium']
+        Dimensions = element['Dimensions']
         costo = element['costo transporte']
-        print(f'TITULO: {titulo} | ARTISTA(S): {artistas} | CLASIFICACION: {clasificacion} | FECHA DE LA OBRA: {fecha} | MEDIO: {medio} | DIMENSIONES: {dimensiones} | COSTO DE TRANSPORTE: {costo}\n')
+        print(f'TITULO: {titulo} | ARTISTA(S): {artistas} | Classification: {Classification} | Date DE LA OBRA: {Date} | Medium: {Medium} | Dimensions: {Dimensions} | COSTO DE TRANSPORTE: {costo}\n')
     #####
     print('\nTOP 5 BY COST ->\n\n')
     for i in top5:
         element = lt.getElement(targetListSorted,i[0])
-        titulo = element['title']
-        artistas = element['autores']
-        clasificacion = element['clasificacion']
-        fecha = element['fecha']
-        medio = element['medio']
-        dimensiones = element['dimensiones']
+        titulo = element['Title']
+        artistas = element['CreditLine']
+        Classification = element['Classification']
+        Date = element['Date']
+        Medium = element['Medium']
+        Dimensions = element['Dimensions']
         costo = element['costo transporte']
-        print(f'TITULO: {titulo} | ARTISTA(S): {artistas} | CLASIFICACION: {clasificacion} | FECHA DE LA OBRA: {fecha} | MEDIO: {medio} | DIMENSIONES: {dimensiones} | COSTO DE TRANSPORTE: {costo}\n')
+        print(f'TITULO: {titulo} | ARTISTA(S): {artistas} | Classification: {Classification} | Date DE LA OBRA: {Date} | Medium: {Medium} | Dimensions: {Dimensions} | COSTO DE TRANSPORTE: {costo}\n')
 
+######                 ######
+######                 ######
+######   REQUISITO 3   ######
+######                 ######
+######                 ######
+
+"""
+ARTIST FOR TEST = Louise Bourgeois
+
+1. obtener el id del artista (checkear que sea diferente a None)
+2. con el id del artistas crear una lista de obras hechas por ese autor
+3. en el mismo loop de (2) obtener la lista de tecnicas con el numero de veces que aparecen
+4. totalObras con lt.size(artworksListById)
+5. dictTecnicas con (3)
+6. bestTecnica con el artwork con mayor valor, loopear el diccionario (3) y 
+guardar el curret high y su llave en variables y retornarlos
+7. artworksListByBestTechnique con bestTecnica (6) se creara una nueva lista que sera 
+
+TODO:
+1. get id DONE
+2. get artworksListById DONE
+4. retornar size de artworksListById DONE 
+5. get dictTecnicas en el loop de la funcion del controller de (2) para reducir complejidad DONE
+6. get bestTecnica DONE
+7. create nueva artworksListByBestTechnique a partir de iterar artworksListById (2) filtrando por tecnica para reducir complejidad DONE
+"""
+
+def controllerR3(author,d_structure):
+    collection = controller.runFunctionsR3(author,d_structure)
+    if collection == None:
+        return None
+    return collection
+
+def visualizationR3(collection, author):
+    artworksListByBestTechnique = collection[0]
+    totalObras = collection[1]
+    dictTecnicas = collection[2]
+    bestTecnica = collection[3]
+    timesUsedBestTecnica = dictTecnicas[bestTecnica]
+    totalTecnicas = collection[4]
+    print(f'\n\n\nEXAMINANDO LOS TRABAJOS DE {author} ->\n\n\n')
+    print(f'Numero total de obras hechas por este artista: {totalObras}')
+    print(f'Numero de tecnicas diferentes usadas por este artista: {totalTecnicas}')
+    print(f'\nLa tecnica mas usada por {author} fue {bestTecnica}, usada {timesUsedBestTecnica} veces.')
+    print(f'\n\nLas tecnicas usadas por {author} fueron: \n\n')
+    for i in dictTecnicas.keys():
+        times = dictTecnicas[i]
+        print(f"TECNICA:  {i}   |   NUMERO DE VECES USADA:  {times}\n")
+    print(f'\nUn ejemplo de 3 obras creadas por este artista con la tecnica {bestTecnica} son ->\n\n')
+    count = 0
+    for i in lt.iterator(artworksListByBestTechnique):
+        if count == 3:
+            break
+        else:
+            count+=1
+        titulo = i['Title']
+        Date = i['Date']
+        Medium = i['Medium']
+        dimensiones = i['Dimensions']
+        print(f'TITULO: {titulo}\nFECHA DE LA OBRA: {Date}| MEDIO: {Medium}| DIMENSIONES: {dimensiones}\n\n')
+    
 
 ######                             ######
 ######                             ######
@@ -504,6 +565,16 @@ while True:
         weightf = OUT[2]
         top5 = OUT[3]
         visualizationR5(artworksListSorted,pricef,weightf,top5)
+    elif int(inputs[0]) == 7:
+        while True:
+            author = input('Ingrese el nombre del autor que desea buscar: \n').strip()
+            collection = controllerR3(author,d_structure)
+            if collection == None:
+                print('Por favor ingresar un nombre valido.')
+                continue
+            else:
+                visualizationR3(collection,author)
+                break
     else:
         sys.exit(0)
 sys.exit(0)
