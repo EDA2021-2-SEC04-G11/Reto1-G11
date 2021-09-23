@@ -161,10 +161,10 @@ def getPriceR5(artwork,top5,ipos)->float:
     priceStandard = 48
     highest = 0
     top5c = top5
-    h =  artwork['Height (cm) (cm)']
-    l =  artwork['Length (cm) (cm)']
+    h =  artwork['Height (cm)']
+    l =  artwork['Length (cm)']
     d =  artwork['Depth (cm)']
-    w =  artwork['Width (cm) (cm)']
+    w =  artwork['Width (cm)']
     area = 0
     volumen = 0
     hbool,lbool,dbool,wbool = False,False,False,False
@@ -182,7 +182,6 @@ def getPriceR5(artwork,top5,ipos)->float:
         wbool = True
     ######
     areal = []
-    print(hbool,lbool,dbool,wbool)
     if hbool and dbool:
         areal.append(h*d)
     if lbool and dbool:
@@ -220,8 +219,92 @@ def getPriceR5(artwork,top5,ipos)->float:
         for i in range(len(top5c)):
             if highest > top5c[i][1]:
                 top5c[i] = (ipos,highest)
-    print(methods)
     return highest,top5c
+
+######                 ######
+######                 ###### 
+######   REQUISITO 6   ######
+######                 ######
+######                 ######
+
+def create_artworksListR6(d_structure):
+    return lt.newList(d_structure)
+
+def load_artworksListR6(artworksList,artwork):
+    artworknew = newArtwork()
+    addInfoArtwork(artworknew,artwork,None)
+    lt.addLast(artworksList,artworknew)
+
+def artworkAreaR6(artwork):
+    """
+    h or l must exist
+    if w missing, d can posibly exist
+    artwork is Photography or Drawings & Prints
+    artwork can't be Architecture & Design
+    is there's only one vlaue, then check dimensions, find the () that has that value
+    """
+    areabool = False
+    area = 0
+    h = artwork['Height (cm)'].strip()
+    w = artwork['Width (cm)'].strip()
+    digits = '0123456789'
+    valid = digits + '.'
+    if h == '':
+        h = artwork['Length (cm)'].strip()
+        if h == '':
+            return 0
+    if w == '':
+        if h != '':
+            w = artwork['Diameter (cm)']
+    if h != '' and h != '':
+        areabool = True
+    elif w == '' and h != '' or w != '' and h == '':
+        dummy = artwork['Dimensions']
+        pt = False
+        h = ''
+        w = ''
+        hs = False
+        ws = False
+        prevwasvalid = False
+        for i in dummy:
+            if hs and ws:
+                areabool = True
+                break
+            if i == '(':
+                pt = True
+            else:
+                pt = False
+            if pt:
+                if i in digits: # '(n'
+                    if not hs:
+                        h += i
+                    elif not ws:
+                        w += i
+                    prevwasvalid = True
+                    continue
+            if i not in valid:
+                if prevwasvalid:
+                    if not hs:
+                        hs = True
+                        prevwasvalid = False
+                        continue
+                    elif not ws:
+                        ws = True
+                        break
+            if i in digits and prevwasvalid:
+                if not hs:
+                    h += i
+                elif not ws:
+                    w += i
+                continue
+    if areabool:
+        area = float(h)*float(w)
+    return area
+            
+
+
+
+    
 
 ######                  ######
 ######                  ######
@@ -285,6 +368,7 @@ def addInfoArtwork(artworknew,artwork,price):
     artworknew['Height (cm)'] = artwork['Height (cm)']
     artworknew['Length (cm)'] = artwork['Length (cm)']
     artworknew['Width (cm)'] = artwork['Width (cm)']
+    artworknew['Diameter (cm)'] = artwork['Diameter (cm)']
     artworknew['Department'] = artwork['Department']
     artworknew['Classification'] = artwork['Classification']
     artworknew['Date'] = artwork['Date']

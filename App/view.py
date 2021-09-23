@@ -20,8 +20,6 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
-
-from typing import Tuple
 import config as cf
 import sys
 import controller
@@ -47,7 +45,7 @@ def printMenu():
     print("7- clasificar las obras de un artista por técnica")
     print("8- clasificar las obras por la nacionalidad de sus creadores")
     print("9- transportar obras de un departamento")
-    print("10- Reglas de transporte")
+    print("10- Nueva exposicion en el museo")
 
 ######                         ######
 ######                         ######
@@ -216,7 +214,7 @@ def sortingPrints(catalog):
 ######                     ######
 ######                     ######
 
-def inputsR1R2(R1,R2)->Tuple:
+def inputsR1R2(R1,R2):
     yi = None
     yf = None
     mi = None
@@ -462,8 +460,68 @@ def visualizationR3(collection, author):
         Medium = i['Medium']
         dimensiones = i['Dimensions']
         print(f'TITULO: {titulo}\nFECHA DE LA OBRA: {Date}| MEDIO: {Medium}| DIMENSIONES: {dimensiones}\n\n')
-    
 
+######                 ######
+######                 ######
+######   REQUISITO 6   ######
+######                 ######
+######                 ######
+
+"""
+1. obtener inputs de area disponible en m^2 para objetos planos, año inicial y año final de las obras
+2. cargar las obras que tengan la llave Date dentro de ese rango de años
+3. obtener la sumatoria de m^2 de la lista (2) y asegurarse de seguir agregando hasta que no se pueda agregar mas
+
+EFICIENCIA:
+1. obtener inputs de area disponible en m^2 para objetos planos, año inicial y año final de las obras DONE
+2. CONTROLLER:
+    a. inicializar sumatoria de areas = 0 - CONTROLLER DONE
+    i. crear una lista vacia para las obras que sean incluidas - MODEL DONE
+    b. crear un loop de artworksfile en el controller - CONTROLLER DONE
+    c. dentro del loop llamar a una funcion del model para obtener el area de una obra por parametro (si es un objeto plano) - MODEL
+    d. calcular diferencia inputArea - (a) - CONTROLLER DONE
+    e. checkear que (d) - (c) > 0, if True, then: (h), else (f) - CONTROLLER DONE
+    h. agregar (c) a (a) y (j) - CONTROLLER DONE
+    j. agregar elemento actual del loop (b) a (i) - MODEL DONE
+    f. pass - CONTROLLER DONE 
+    g. return (a) - CONTROLLER DONE
+"""
+
+def inputR6():
+    datei = int(input('Introduce el año inicial: \n').strip())
+    datef = int(input('Introduce el año final: \n').strip())
+    inputArea = float(input('Introduce el area en m^2 disponible para los cuadros y fotos: \n').strip())
+    return datei,datef,inputArea
+
+def controllerR6(datei: int,datef: int,inputArea: int,d_structure):
+    collection = controller.runFunctionsR6(datei,datef,inputArea,d_structure)
+    return collection
+
+def visualizacionR6(collection):
+    artworkslist = collection[0]
+    areaSum = collection[1]
+    size = lt.size(artworkslist)
+    print(f'Numero de obras: {size}')
+    print(f'Area a utilizar: {areaSum}')
+    print('\n\nPrimeras 5 y ultimas 5 obras ->\n\n')
+    for i in range(1,6):
+        e = lt.getElement(artworkslist,i)
+        titulo = e['Title']
+        Date = e['Date']
+        Medium = e['Medium']
+        dimensiones = e['Dimensions']
+        artistas = e['CreditLine']
+        clasificacion = e['Classification']
+        print(f'TITULO: {titulo}\nFECHA DE LA OBRA: {Date}| MEDIO: {Medium}| DIMENSIONES: {dimensiones} | ARTISTAS: {artistas} | CLASIFICACION: {clasificacion}\n\n')
+    for i in range(size-5,size+1):
+        e = lt.getElement(artworkslist,i)
+        titulo = e['Title']
+        Date = e['Date']
+        Medium = e['Medium']
+        dimensiones = e['Dimensions']
+        artistas = e['CreditLine']
+        clasificacion = e['Classification']
+        print(f'TITULO: {titulo}\nFECHA DE LA OBRA: {Date}| MEDIO: {Medium}| DIMENSIONES: {dimensiones} | ARTISTAS: {artistas} | CLASIFICACION: {clasificacion}\n\n')
 ######                             ######
 ######                             ######
 ######   VALORES PREDETERMINADOS   ######
@@ -487,7 +545,7 @@ statusR2 = False
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
-    if int(inputs[0]) == 1:
+    if int(inputs[0]) == 1 and '10' not in inputs:
         print('Escribir al para ARRAY_LIST o ll para LINKED_LIST')
         input_1 = input()
         if input_1[:2] == 'al':
@@ -582,6 +640,13 @@ while True:
             else:
                 visualizationR3(collection,author)
                 break
+    elif int(inputs[:2]) == 10:
+        collectionInputs = inputR6()
+        datei = collectionInputs[0]
+        datef = collectionInputs[1]
+        inputArea = collectionInputs[2]
+        collection = controllerR6(datei,datef,inputArea,d_structure)
+        visualizacionR6(collection)
     else:
         sys.exit(0)
 sys.exit(0)

@@ -156,6 +156,43 @@ def loadArtworksR5(targetList,department):
                 weightf += float(artwork['Weight (kg)'])
     return pricef,weightf,top5
 
+######                 ######
+######                 ######
+######   REQUISITO 6   ######
+######                 ######
+######                 ######
+
+def runFunctionsR6(datei,datef,inputArea,d_structure):
+    artworksList = create_artworksListR6(d_structure)
+    sumArea = mainLoopR6(artworksList,datei,datef,inputArea)
+    return artworksList,sumArea
+
+def mainLoopR6(artworksList,datei,datef,inputArea)->tuple: # artworksList is empty | returns sumArea
+    inputArea = inputArea*10000
+    sumArea = 0
+    artworksfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
+    artworksFile = csv.DictReader(open(artworksfile, encoding='utf-8'))
+    for artwork in artworksFile:
+        diff = inputArea - sumArea
+        dateStr = artwork['Date'].strip().replace(' ','')
+        if dateStr != '':
+            date = int(dateStr)
+            if date >= datei and date <= datef:
+                area = get_artworkAreaR6(artwork)
+                if area <= diff:
+                    sumArea += area
+                    load_artworksListR6(artworksList,artwork)
+    return sumArea/10000
+
+def get_artworkAreaR6(artwork):
+    return model.artworkAreaR6(artwork)
+
+def create_artworksListR6(d_structure):
+    return model.create_artworksListR6(d_structure)
+
+def load_artworksListR6(artworksList,artwork):
+    model.load_artworksListR6(artworksList,artwork)
+
 ######                  ######
 ######                  ######
 ######   SUBFUNCTIONS   ######
