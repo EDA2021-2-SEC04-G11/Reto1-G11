@@ -26,6 +26,7 @@ import controller
 from DISClib.ADT import list as lt
 assert cf
 import datetime
+import time
 
 """
 La vista se encarga de la interacción con el usuario
@@ -614,39 +615,55 @@ while True:
             print('Hay inputs incorrectos, por favor iniciar nuevamente.')
             continue
         else:
+            start_time = time.process_time()
             collection = controllerR1R2(key,target,datei,datef, d_structure)
             targetListSorted = collection[0]
             pucharseCount = collection[1]
             visualizationR1R2(targetListSorted,target,datei,datef,pucharseCount)
+            stop_time = time.process_time()
+            elapsed_time_mseg = (stop_time - start_time)*1000
+            print(f'TIEMPO {elapsed_time_mseg}')
             if req == 1:
                 statusR1 = True
             elif req == 2:
                 statusR2 = True
     elif  int(inputs[0]) == 9:
         department = inputR5()
+        start_time = time.process_time()
         OUT = controllerR5(None,'artworks',d_structure,department)
         artworksListSorted = OUT[0]
         pricef = OUT[1]
         weightf = OUT[2]
         top5 = OUT[3]
         visualizationR5(artworksListSorted,pricef,weightf,top5)
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)*1000
+        print(f'TIEMPO {elapsed_time_mseg}')
     elif int(inputs[0]) == 7:
         while True:
             author = input('Ingrese el nombre del autor que desea buscar: \n').strip()
+            start_time = time.process_time()
             collection = controllerR3(author,d_structure)
             if collection == None:
                 print('Por favor ingresar un nombre valido.')
                 continue
             else:
                 visualizationR3(collection,author)
+                stop_time = time.process_time()
+                elapsed_time_mseg = (stop_time - start_time)*1000
+                print(f'TIEMPO {elapsed_time_mseg}')
                 break
     elif int(inputs[:2]) == 10:
         collectionInputs = inputR6()
+        start_time = time.process_time()
         datei = collectionInputs[0]
         datef = collectionInputs[1]
         inputArea = collectionInputs[2]
         collection = controllerR6(datei,datef,inputArea,d_structure)
         visualizacionR6(collection)
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)*1000
+        print(f'TIEMPO {elapsed_time_mseg}')
     else:
         sys.exit(0)
 sys.exit(0)
