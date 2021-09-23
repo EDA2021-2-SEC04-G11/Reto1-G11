@@ -48,10 +48,12 @@ def createListR1R2(key,target, d_structure):
     return targetList
 
 def loadTargetR1R2(targetList,target,datei,datef):
+    count = None
     if target == 'artists':
         loadArtistsR1R2(targetList,datei,datef)
     elif target == 'artworks':
-        loadArtworksR1R2(targetList,datei,datef)
+        count = loadArtworksR1R2(targetList,datei,datef)
+    return count
 
 def loadArtistsR1R2(targetList,datei,datef):
     """
@@ -68,16 +70,20 @@ def loadArtworksR1R2(targetList,datei,datef):
     """
     Carga el archivo de obras y lo agrega al catalogo de obras.
     """
+    count = 0
     di = datetime.date.fromisoformat(datei)
     df = datetime.date.fromisoformat(datef)
     artworksfile = cf.data_dir + 'MoMA/Artworks-utf8-small.csv'
     artworksFile = csv.DictReader(open(artworksfile, encoding='utf-8'))
     for artwork in artworksFile:
+        if 'Purchase' in artwork['CreditLine']:
+            count+=1
         dartwork = artwork['DateAcquired']
         if dartwork != '':
             dartwork = datetime.date.fromisoformat(dartwork)
             if di <= dartwork and df >= dartwork:
                 model.addArtworkR1R2(targetList,artwork,None)
+    return count
 
 ######                 ######
 ######                 ######

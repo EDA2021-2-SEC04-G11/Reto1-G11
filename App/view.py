@@ -327,23 +327,28 @@ def sortR1R2(targetList,target):
 def controllerR1R2(key,target,datei,datef, d_structure):
     print("Cargando información de los archivos ....")
     targetList = controller.createListR1R2(key,target, d_structure)
-    controller.loadTargetR1R2(targetList,target,datei,datef)
+    pucharseCount = controller.loadTargetR1R2(targetList,target,datei,datef)
     targetListSorted = sortR1R2(targetList,target)
-    return targetListSorted
+    return targetListSorted, pucharseCount
     
-def visualizationR1R2(targetListSorted,target):
+def visualizationR1R2(targetListSorted,target,datei,datef,pucharseCount):
     #date for artwork: 1944-06-06   1989-09-09
     first = lt.getElement(targetListSorted,1)
     second = lt.getElement(targetListSorted,2)
     third = lt.getElement(targetListSorted,3)
-    secondToLast = lt.getElement(targetListSorted,lt.size(targetListSorted)-2)
-    nextToLast = lt.getElement(targetListSorted,lt.size(targetListSorted)-1)
-    last = lt.getElement(targetListSorted,lt.size(targetListSorted))
+    size = lt.size(targetListSorted)
+    secondToLast = lt.getElement(targetListSorted,size-2)
+    nextToLast = lt.getElement(targetListSorted,size-1)
+    last = lt.getElement(targetListSorted,size)
     preview = [first,second,third,secondToLast,nextToLast,last]
     if target == 'artists':
+        print(f'\n\nHay {lt.size(targetListSorted)} artistas nacidos entre {datei} y {datef}.\n\n')
+        print(f'A continuacion se imprimiran los primeros 3 y ultimos 3 artistas en el rango cronologico ->\n\n')
         for i in preview:
             print(f"NAME: {i['name']} | BIRTHDAY: {i['birthday']} | R.I.P {i['deathday']} | NATIONALITY: {i['nationality']} | GENERO: {i['gender']}\n\n")
     elif target == 'artworks':
+        print(f'\n\nHay {lt.size(targetListSorted)} artworks entre {datei} y {datef}, donde {pucharseCount} fueron comparadas (pucharse).\n\n')
+        print(f'A continuacion se imprimiran los primeros 3 y ultimos 3 artworks en el rango cronologico ->\n\n')
         for i in preview:
             print(f"Title: {i['Title']} | ConstituentID: {i['ConstituentID']} | DATE {i['DateAcquired']} | Medium: {i['Medium']} | Dimensions: {i['Dimensions']}\n\n")
 
@@ -529,12 +534,12 @@ while True:
         if R1:
             if statusR1:
                 print('Ya creaste usaste esta funcionalidad anteriormente, te visualizare los datos.')
-                visualizationR1R2(targetListSorted,target)
+                visualizationR1R2(targetListSorted,target,datei,datef,pucharseCount)
                 continue
         elif R2:
             if statusR2:
                 print('Ya creaste usaste esta funcionalidad anteriormente, te visualizare los datos.')
-                visualizationR1R2(targetListSorted,target)
+                visualizationR1R2(targetListSorted,target,datei,datef,pucharseCount)
                 continue
         inputsR12 = inputsR1R2(R1,R2)
         datei = inputsR12[0]
@@ -551,8 +556,10 @@ while True:
             print('Hay inputs incorrectos, por favor iniciar nuevamente.')
             continue
         else:
-            targetListSorted = controllerR1R2(key,target,datei,datef, d_structure)
-            visualizationR1R2(targetListSorted,target)
+            collection = controllerR1R2(key,target,datei,datef, d_structure)
+            targetListSorted = collection[0]
+            pucharseCount = collection[1]
+            visualizationR1R2(targetListSorted,target,datei,datef,pucharseCount)
             if req == 1:
                 statusR1 = True
             elif req == 2:

@@ -235,7 +235,6 @@ def createSublist(catalog,pos,value):
     max_artworks = lt.size(catalog['artworks'])
     amount_artists = int(max_artists*value)
     amount_artworks = int(max_artworks*value)
-    print(amount_artists,amount_artworks)
     temp = catalog.copy()
     del catalog['artists']
     del catalog['artworks']
@@ -277,7 +276,6 @@ def addInfoArtwork(artworknew,artwork,price):
     """
     Añade la información de una determinada obra.
     """
-    print(artwork['Title'])
     artworknew['Title'] = artwork['Title']
     artworknew['DateAcquired'] = artwork['DateAcquired']
     artworknew['Medium'] = artwork['Medium']
